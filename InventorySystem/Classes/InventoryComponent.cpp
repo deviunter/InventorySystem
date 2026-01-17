@@ -205,6 +205,7 @@ bool UInventoryComponent::SplitItem(int32 TopLeftIndex, int32 NewItemAmmound)
 			}
 		}
 	}
+	return true;
 }
 
 bool UInventoryComponent::UseItem(UItemBase* ItemToUse)
@@ -213,6 +214,7 @@ bool UInventoryComponent::UseItem(UItemBase* ItemToUse)
 	{
 		ItemToUse->StartUsingItem();
 	}
+	return true;
 }
 
 bool UInventoryComponent::IsRoomAvailable(UItemBase* ItemToAdd, int32 TopLeftIndex)
