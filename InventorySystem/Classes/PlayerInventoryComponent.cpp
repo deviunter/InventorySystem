@@ -49,4 +49,5 @@ FResourceSignature UPlayerInventoryComponent::GetResourceAtType(EResourceType Re
 			return ResourceList[i];
 		}
 	}
+	return FResourceSignature();
 }
