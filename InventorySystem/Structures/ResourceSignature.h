@@ -6,4 +6,23 @@
 // This software and its source code are the intellectual property of Skydream Interactive.
 // Unauthorized copying, modification, distribution, or use is strictly prohibited.
 
-#include "Systems/InventorySystem/Structures/ItemSignature.h"
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Systems/InventorySystem/Enumerators/InventoryEnumetators.h"
+#include "ResourceSignature.generated.h"
+
+USTRUCT(BlueprintType)
+struct FResourceSignature
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 CurrentAmmound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MaxAmmound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EResourceType ResourceType;
+};

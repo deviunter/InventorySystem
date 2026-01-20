@@ -2,6 +2,10 @@
 // Unreal® Engine and its logo are trademarks or registered trademarks of Epic Games, Inc.
 // in the United States and elsewhere. All other trademarks are the property of their respective owners.
 
+// Reflection Engine © 2025 Deviunter & Skydream Interactive. All Rights Reserved. 
+// This software and its source code are the intellectual property of Skydream Interactive.
+// Unauthorized copying, modification, distribution, or use is strictly prohibited.
+
 #include "Systems/InventorySystem/Classes/InventoryComponent.h"
 
 UInventoryComponent::UInventoryComponent()
@@ -10,6 +14,9 @@ UInventoryComponent::UInventoryComponent()
 
 	RowSize = 4;
 	ColumnSize = 5;
+
+	TileSize = 90.0f;
+	InventoryType = EInventoryType::DefaultInventory;
 }
 
 void UInventoryComponent::BeginPlay()
@@ -248,6 +255,28 @@ bool UInventoryComponent::IsRoomAvailable(UItemBase* ItemToAdd, int32 TopLeftInd
 	return true;
 }
 
+bool UInventoryComponent::AddItemToSlot(UItemBase* ItemToAdd, int32 TopLeftIndex)
+{
+	FItemTile Tile;
+	for (int32 x = IndexToTile(TopLeftIndex).X; x < ItemToAdd->GetItemDimension().X + IndexToTile(TopLeftIndex).X; x++)
+	{
+		for (int32 y = IndexToTile(TopLeftIndex).Y; y < ItemToAdd->GetItemDimension().Y + IndexToTile(TopLeftIndex).Y; y++)
+		{
+			if (x + ItemToAdd->GetItemDimension().X <= ColumnSize && y + ItemToAdd->GetItemDimension().Y <= RowSize)
+			{
+				Tile = FItemTile(x, y);
+				ItemSlots[TileToIndex(Tile)] = ItemToAdd;
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+	AddItemNotification(ItemToAdd, EInventoryAddingType::AddedToNew);
+	return true;
+}
+
 void UInventoryComponent::AddItemNotification(UItemBase* AddedItem, EInventoryAddingType ItemState)
 {
 	// THIS FUNCTION WILL BE DEFINED IN PLAYER INVENTORY COMPONENT CHILD CLASS
@@ -352,19 +381,22 @@ TArray<UItemBase*> UInventoryComponent::GetAllItemSlots()
 	return ItemSlots;
 }
 
-//const TMap<FSlotSignature, FItemTile>& UInventoryComponent::GetAllItemsAndPosition()
-//{
-//	TMap<FSlotSignature, FItemTile> LocalItems;
-//	LocalItems.Empty();
-//	for (int32 i = 0; i < ItemSlots.Num(); i++)
-//	{
-//		if (!LocalItems.Contains(ItemSlots[i]) && UInventoryStaticsLibrary::IsSlotValid(ItemSlots[i]))
-//		{
-//			LocalItems.Add(ItemSlots[i], IndexToTile(i));
-//		}
-//	}
-//	return LocalItems;
-//}
+TMap<UItemBase*, FItemTile> UInventoryComponent::GetAllItemsAndPosition()
+{
+	TMap<UItemBase*, FItemTile> LocalItems;
+	LocalItems.Empty();
+	for (int32 i = 0; i < ItemSlots.Num(); i++)
+	{
+		if (IsValid(ItemSlots[i]))
+		{
+			if (!LocalItems.Contains(ItemSlots[i]))
+			{
+				LocalItems.Add(ItemSlots[i], IndexToTile(i));
+			}
+		}
+	}
+	return LocalItems;
+}
 
 // I DO THIS LATER (2 FUNC LOWER)
 
@@ -378,6 +410,8 @@ int32 UInventoryComponent::GetItemAmmound(UItemBase* SearchingClass)
 	return int32();
 }
 
+// I DO THIS LATER ^^
+
 void UInventoryComponent::SetNewInventorySize(int32 Column, int32 Row)
 {
 	ColumnSize = Column;
@@ -385,9 +419,24 @@ void UInventoryComponent::SetNewInventorySize(int32 Column, int32 Row)
 	UpdateInventorySize();
 }
 
+EInventoryType UInventoryComponent::GetInventoryType()
+{
+	return InventoryType;
+}
+
+FText UInventoryComponent::GetInventoryName()
+{
+	return InventoryName;
+}
+
+float UInventoryComponent::GetItemTile()
+{
+	return TileSize;
+}
+
 void UInventoryComponent::UpdateInventorySize()
 {
 	ItemSlots.SetNum(ColumnSize * RowSize);
 }
 
-// I DO THIS LATER ^^
+

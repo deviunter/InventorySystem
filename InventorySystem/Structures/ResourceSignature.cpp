@@ -6,4 +6,4 @@
 // This software and its source code are the intellectual property of Skydream Interactive.
 // Unauthorized copying, modification, distribution, or use is strictly prohibited.
 
-#include "Systems/InventorySystem/Structures/ItemSignature.h"
+#include "Systems/InventorySystem/Structures/ResourceSignature.h"
