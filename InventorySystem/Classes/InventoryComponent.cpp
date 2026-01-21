@@ -7,6 +7,8 @@
 // Unauthorized copying, modification, distribution, or use is strictly prohibited.
 
 #include "Systems/InventorySystem/Classes/InventoryComponent.h"
+#include "UObject/ConstructorHelpers.h"
+#include "Core/Interfaces/WidgetsInterface.h"
 
 UInventoryComponent::UInventoryComponent()
 {
@@ -17,11 +19,14 @@ UInventoryComponent::UInventoryComponent()
 
 	TileSize = 90.0f;
 	InventoryType = EInventoryType::DefaultInventory;
+
+	GetWidgetClass();
 }
 
 void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	CreateGridWidget();
 	UpdateInventorySize();
 }
 
@@ -153,7 +158,7 @@ int32 UInventoryComponent::AddItemToStackWithReminder(UItemBase* ItemToAdd, int3
 }
 
 // щрн ярюпши бюпхюмр пеюкхгюжхх щрни тсмйжхх, нм хяопюбем, мн нм ме опедсялюрпхбюер рнцн, врн йнк-бн сдюкъелнцн лнфер ашрэ анкэье вел йнк-бн опедлерю б якнре.
-bool UInventoryComponent::RemoveItem(UItemBase* ItemToRemove, int32 AmmoundToRemove)
+bool UInventoryComponent::RemoveItem(UItemBase* ItemToRemove, int32 AmmoundToRemove, bool DestroyItem)
 {
 	for (int32 i = 0; i < ItemSlots.Num(); i++)
 	{
@@ -166,7 +171,10 @@ bool UInventoryComponent::RemoveItem(UItemBase* ItemToRemove, int32 AmmoundToRem
 			}
 			else if (ItemSlots[i]->GetCurrentAmmound() == AmmoundToRemove)
 			{
-				ItemSlots[i]->MarkAsGarbage();
+				if (DestroyItem)
+				{
+					ItemSlots[i]->MarkAsGarbage();
+				}
 				ItemSlots[i] = nullptr;
 			}
 			else
@@ -175,6 +183,7 @@ bool UInventoryComponent::RemoveItem(UItemBase* ItemToRemove, int32 AmmoundToRem
 			}
 		}
 	}
+	UpdateGridWidget();
 	return true;
 }
 
@@ -273,13 +282,14 @@ bool UInventoryComponent::AddItemToSlot(UItemBase* ItemToAdd, int32 TopLeftIndex
 			}
 		}
 	}
+	UpdateGridWidget();
 	AddItemNotification(ItemToAdd, EInventoryAddingType::AddedToNew);
 	return true;
 }
 
 void UInventoryComponent::AddItemNotification(UItemBase* AddedItem, EInventoryAddingType ItemState)
 {
-	// THIS FUNCTION WILL BE DEFINED IN PLAYER INVENTORY COMPONENT CHILD CLASS
+	UpdateGridWidget();
 }
 
 bool UInventoryComponent::IsTileValid(FItemTile Tile)
@@ -437,6 +447,35 @@ float UInventoryComponent::GetItemTile()
 void UInventoryComponent::UpdateInventorySize()
 {
 	ItemSlots.SetNum(ColumnSize * RowSize);
+	UpdateGridWidget();
 }
 
+void UInventoryComponent::CreateGridWidget()
+{
+	InventoryGrid = CreateWidget<UUserWidget>(GetWorld(), InventoryGridClass);
+	IWidgetsInterface::Execute_SetOwnerInventoryReference((UObject*)InventoryGrid, this);
+	UpdateGridWidget();
+}
 
+void UInventoryComponent::UpdateGridWidget()
+{
+	if (IsValid(InventoryGrid))
+	{
+		IWidgetsInterface::Execute_UpdateInventoryGrid((UObject*)InventoryGrid);
+	}
+}
+
+void UInventoryComponent::GetWidgetClass()
+{
+	static ConstructorHelpers::FClassFinder<UUserWidget> InventoryGridWidget(TEXT("/Game/SD/Systems/InventorySystem/UI/InventoryGrid"));
+	if (InventoryGridWidget.Class != nullptr)
+	{
+		InventoryGridClass = InventoryGridWidget.Class;
+		return;
+	}
+}
+
+UUserWidget* UInventoryComponent::GetGridWidget()
+{
+	return InventoryGrid;
+}

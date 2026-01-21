@@ -17,6 +17,8 @@ UPlayerInventoryComponent::UPlayerInventoryComponent()
 	ResourceList.Add(FResourceSignature(0, 15, EResourceType::ElectricalResource));
 	ResourceList.Add(FResourceSignature(0, 35, EResourceType::ChemicalResource));
 	ResourceList.Add(FResourceSignature(0, 35, EResourceType::BioResource));
+	// SET UP KEY DATA ARRAY
+	KeyDataList.Empty();
 }
 
 EResourceAddType UPlayerInventoryComponent::AddResouceAtType(EResourceType ResourceType, int32 AddAmmound)
@@ -50,4 +52,109 @@ FResourceSignature UPlayerInventoryComponent::GetResourceAtType(EResourceType Re
 		}
 	}
 	return FResourceSignature();
+}
+
+bool UPlayerInventoryComponent::RemoveResourceAtType(EResourceType ResourceType, int32 RemoveAmmound)
+{
+	for (int32 i = 0; i < ResourceList.Num(); i++)
+	{
+		if (ResourceList[i].ResourceType == ResourceType)
+		{
+			if (ResourceList[i].CurrentAmmound > RemoveAmmound)
+			{
+				ResourceList[i].CurrentAmmound -= RemoveAmmound;
+				return true;
+			}
+			else
+			{
+				ResourceList[i].CurrentAmmound = 0;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+TArray<FResourceSignature> UPlayerInventoryComponent::GetAllResources()
+{
+	return ResourceList;
+}
+
+bool UPlayerInventoryComponent::AddKeyDataAtID(FName KeyDataID)
+{
+	UDataTable* KeyData = LoadObject<UDataTable>(nullptr, TEXT("/Game/SD/Systems/InventorySystem/DataTables/KeyDataItems"));
+	if (!KeyData) return false;
+	if (!KeyData->FindRow<FKeyDataSignature>(KeyDataID, TEXT(""), true)) return false;
+	FKeyDataSignature* LocalKeyDataPtr = KeyData->FindRow<FKeyDataSignature>(KeyDataID, TEXT(""), true);
+	FKeyDataSignature LocalKeyData = *LocalKeyDataPtr;
+	AddKeyDataAtStructure(LocalKeyData);
+	return true;
+}
+
+bool UPlayerInventoryComponent::AddKeyDataAtStructure(FKeyDataSignature KeyDataSignature)
+{
+	if (!IsKeyDataContains(KeyDataSignature.KeyDataID))
+	{
+		KeyDataList.Add(KeyDataSignature);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool UPlayerInventoryComponent::SetKeyDataIsUsed(FName KeyDataID, bool NewIsUsed)
+{
+	for (int32 i = 0; i < KeyDataList.Num(); i++)
+	{
+		if (KeyDataList[i].KeyDataID == KeyDataID)
+		{
+			KeyDataList[i].bIsUsed = NewIsUsed;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool UPlayerInventoryComponent::RemoveKeyDataAtID(FName KeyDataID)
+{
+	for (int32 i = 0; i < KeyDataList.Num(); i++)
+	{
+		if (KeyDataList[i].KeyDataID == KeyDataID)
+		{
+			KeyDataList.RemoveAt(i);
+			return true;
+		}
+	}
+	return false;
+}
+
+FKeyDataSignature UPlayerInventoryComponent::GetKeyDataAtID(FName KeyDataID)
+{
+	for (int32 i = 0; i < KeyDataList.Num(); i++)
+	{
+		if (KeyDataList[i].KeyDataID == KeyDataID)
+		{
+			return KeyDataList[i];
+		}
+	}
+	return FKeyDataSignature();
+}
+
+TArray<FKeyDataSignature> UPlayerInventoryComponent::GetKeyDataCollected()
+{
+	return KeyDataList;
+}
+
+bool UPlayerInventoryComponent::IsKeyDataContains(FName KeyDataID)
+{
+	for (int32 i = 0; i < KeyDataList.Num(); i++)
+	{
+		if (KeyDataList[i].KeyDataID == KeyDataID)
+		{
+			return true;
+		}
+	}
+	return false;
 }

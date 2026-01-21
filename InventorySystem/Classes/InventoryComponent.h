@@ -17,6 +17,7 @@
 #include "Components/ActorComponent.h"
 #include "Systems/InventorySystem/Enumerators/InventoryEnumetators.h"
 #include "Systems/InventorySystem/Classes/ItemBase.h"
+#include "Blueprint/UserWidget.h"
 #include "InventoryComponent.generated.h"
 
 
@@ -49,7 +50,7 @@ public:
 	// Removes a specified amount of an item from the inventory.
 	// If amount becomes zero, the item is removed from slots.
 	UFUNCTION(BlueprintCallable, Category = "Manage")
-	bool RemoveItem(UItemBase* ItemToAdd, int32 AmmoundToRemove);
+	bool RemoveItem(UItemBase* ItemToAdd, int32 AmmoundToRemove, bool DestroyItem);
 
 	// Drops an item from the inventory (e.g., spawns in world).
 	UFUNCTION(BlueprintCallable, Category = "Manage")
@@ -123,6 +124,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory Info")
 	float GetItemTile();
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory Info")
+	UUserWidget* GetGridWidget(); 
+
 	// Number of columns in the inventory grid.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Size")
 	int32 ColumnSize;
@@ -166,6 +170,21 @@ private:
 	// Updates slot array size based on current grid dimensions.
 	UFUNCTION()
 	void UpdateInventorySize();
+
+	UFUNCTION()
+	void CreateGridWidget();
+
+	UFUNCTION()
+	void UpdateGridWidget();
+
+	UFUNCTION()
+	void GetWidgetClass();
+
+	UPROPERTY()
+	TSubclassOf<class UUserWidget> InventoryGridClass;
+
+	UPROPERTY()
+	TObjectPtr<UUserWidget> InventoryGrid;
 
 	// Type of inventory (affects behavior and UI).
 	UPROPERTY()

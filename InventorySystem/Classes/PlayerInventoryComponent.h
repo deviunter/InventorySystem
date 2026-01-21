@@ -13,9 +13,10 @@
 #include "Systems/InventorySystem/Structures/ResourceSignature.h"
 #include "Systems/InventorySystem/Enumerators/InventoryEnumetators.h"
 #include "Systems/InventorySystem/Structures/PlayerInventorySaveSignature.h"
+#include "Systems/InventorySystem/Structures/KeyDataSignature.h"
 #include "PlayerInventoryComponent.generated.h"
 
-UCLASS()
+UCLASS( ClassGroup = (Custom), meta = (BlueprintSpawnableComponent) )
 class ABYSSWHISPER_API UPlayerInventoryComponent : public UInventoryComponent
 {
 	GENERATED_BODY()
@@ -33,8 +34,38 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Resources")
 	FResourceSignature GetResourceAtType(EResourceType ResourceType);
 
+	UFUNCTION(BlueprintCallable, Category = "Resources")
+	bool RemoveResourceAtType(EResourceType ResourceType, int32 RemoveAmmound);
+
+	UFUNCTION(BlueprintCallable, Category = "Resources")
+	TArray<FResourceSignature> GetAllResources();
+
+	UFUNCTION(BlueprintCallable, Category = "Key Data")
+	bool AddKeyDataAtID(FName KeyDataID);
+
+	UFUNCTION(BlueprintCallable, Category = "Key Data")
+	bool AddKeyDataAtStructure(FKeyDataSignature KeyDataSignature);
+
+	UFUNCTION(BlueprintCallable, Category = "Key Data")
+	bool SetKeyDataIsUsed(FName KeyDataID, bool NewIsUsed);
+
+	UFUNCTION(BlueprintCallable, Category = "Key Data")
+	bool RemoveKeyDataAtID(FName KeyDataID);
+
+	UFUNCTION(BlueprintCallable, Category = "Key Data")
+	FKeyDataSignature GetKeyDataAtID(FName KeyDataID);
+
+	UFUNCTION(BlueprintCallable, Category = "Key Data")
+	TArray<FKeyDataSignature> GetKeyDataCollected();
+
+	UFUNCTION(BlueprintCallable, Category = "Key Data")
+	bool IsKeyDataContains(FName KeyDataID);
+
 private:
 
 	UPROPERTY()
 	TArray<FResourceSignature> ResourceList;
+
+	UPROPERTY()
+	TArray<FKeyDataSignature> KeyDataList;
 };
