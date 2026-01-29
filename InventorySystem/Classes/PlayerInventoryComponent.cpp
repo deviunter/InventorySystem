@@ -10,15 +10,27 @@
 
 UPlayerInventoryComponent::UPlayerInventoryComponent()
 {
+	// SET UP RESOURCE ARRAY TYPES MAX AMOUNT
+	WoodResourceMaxAmount = 20;
+	MetalResourceMaxAmount = 25;
+	ElectricalResourceMaxAmount = 15;
+	ChemicalResourceMaxAmount = 30;
+	BioResourceMaxAmount = 35;
+
 	// SET UP RESOURCE ARRAY
 	ResourceList.Empty();
-	ResourceList.Add(FResourceSignature(0, 20, EResourceType::WoodResource));
-	ResourceList.Add(FResourceSignature(0, 30, EResourceType::MetalResource));
-	ResourceList.Add(FResourceSignature(0, 15, EResourceType::ElectricalResource));
-	ResourceList.Add(FResourceSignature(0, 35, EResourceType::ChemicalResource));
-	ResourceList.Add(FResourceSignature(0, 35, EResourceType::BioResource));
+	ResourceList.Add(FResourceSignature(0, WoodResourceMaxAmount, EResourceType::WoodResource));
+	ResourceList.Add(FResourceSignature(0, MetalResourceMaxAmount, EResourceType::MetalResource));
+	ResourceList.Add(FResourceSignature(0, ElectricalResourceMaxAmount, EResourceType::ElectricalResource));
+	ResourceList.Add(FResourceSignature(0, ChemicalResourceMaxAmount, EResourceType::ChemicalResource));
+	ResourceList.Add(FResourceSignature(0, BioResourceMaxAmount, EResourceType::BioResource));
+
 	// SET UP KEY DATA ARRAY
 	KeyDataList.Empty();
+
+	// SET UP CHARMS INVENTORY
+	CharmInventoryLength = 3;
+	RefreshCharmInventory();
 }
 
 EResourceAddType UPlayerInventoryComponent::AddResouceAtType(EResourceType ResourceType, int32 AddAmmound)
@@ -157,4 +169,70 @@ bool UPlayerInventoryComponent::IsKeyDataContains(FName KeyDataID)
 		}
 	}
 	return false;
+}
+
+bool UPlayerInventoryComponent::AddCharmItem(UItemBase* ItemToAdd)
+{
+	if (ItemToAdd->GetItemSignature().ItemType != EItemType::Charms) return false;
+	for (int32 i = 0; i < CharmsList.Num(); i++)
+	{
+		if (IsCharmSlotEmpty(i))
+		{
+			AddCharmItemToSlot(ItemToAdd, i);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool UPlayerInventoryComponent::AddCharmItemToSlot(UItemBase* ItemToAdd, int32 SlotIndex)
+{
+	if (ItemToAdd->GetItemSignature().ItemType != EItemType::Charms) return false;
+	CharmsList[SlotIndex] = ItemToAdd;
+	return true;
+}
+
+bool UPlayerInventoryComponent::RemoveCharmItemAtIndex(int32 SlotIndex, bool DestroyItem)
+{
+	if (IsCharmSlotEmpty(SlotIndex)) return false;
+	if (DestroyItem)
+	{
+		CharmsList[SlotIndex]->MarkAsGarbage();
+	}
+	CharmsList[SlotIndex] = nullptr;
+	return true;
+}
+
+TArray<UItemBase*> UPlayerInventoryComponent::GetCharmItems()
+{
+	return CharmsList;
+}
+
+UItemBase* UPlayerInventoryComponent::GetCharmItemAtIndex(int32 ItemIndex)
+{
+	if (IsCharmSlotEmpty(ItemIndex))
+	{
+		return nullptr;
+	}
+	else
+	{
+		return CharmsList[ItemIndex];
+	}
+}
+
+bool UPlayerInventoryComponent::IsCharmSlotEmpty(int32 SlotIndex)
+{
+	if (IsValid(CharmsList[SlotIndex]))
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+void UPlayerInventoryComponent::RefreshCharmInventory()
+{
+	CharmsList.SetNum(CharmInventoryLength);
 }

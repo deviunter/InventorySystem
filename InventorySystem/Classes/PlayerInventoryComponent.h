@@ -28,6 +28,8 @@ public:
 	/*UFUNCTION(BlueprintCallable, BlueprintPure, Category = "SaveGame")
 	FPlayerInventorySaveSignature SavePlayerInventory();*/
 
+	// RESOURCES INVENTORY
+
 	UFUNCTION(BlueprintCallable, Category = "Resources")
 	EResourceAddType AddResouceAtType(EResourceType ResourceType, int32 AddAmmound);
 
@@ -37,8 +39,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Resources")
 	bool RemoveResourceAtType(EResourceType ResourceType, int32 RemoveAmmound);
 
-	UFUNCTION(BlueprintCallable, Category = "Resources")
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Resources")
 	TArray<FResourceSignature> GetAllResources();
+
+	// KEY DATA ITEMS INVENTORY
 
 	UFUNCTION(BlueprintCallable, Category = "Key Data")
 	bool AddKeyDataAtID(FName KeyDataID);
@@ -55,11 +59,58 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Key Data")
 	FKeyDataSignature GetKeyDataAtID(FName KeyDataID);
 
-	UFUNCTION(BlueprintCallable, Category = "Key Data")
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Key Data")
 	TArray<FKeyDataSignature> GetKeyDataCollected();
 
 	UFUNCTION(BlueprintCallable, Category = "Key Data")
 	bool IsKeyDataContains(FName KeyDataID);
+
+	// CHARMS INVENTORY
+
+	UFUNCTION(BlueprintCallable, Category = "Charms")
+	bool AddCharmItem(UItemBase* ItemToAdd);
+
+	UFUNCTION(BlueprintCallable, Category = "Charms")
+	bool AddCharmItemToSlot(UItemBase* ItemToAdd, int32 SlotIndex);
+
+	UFUNCTION(BlueprintCallable, Category = "Charms")
+	bool RemoveCharmItemAtIndex(int32 SlotIndex, bool DestroyItem);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Charms")
+	TArray<UItemBase*> GetCharmItems();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Charms")
+	UItemBase* GetCharmItemAtIndex(int32 ItemIndex);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Charms")
+	bool IsCharmSlotEmpty(int32 SlotIndex);
+
+	UFUNCTION(BlueprintCallable, Category = "Charms")
+	void RefreshCharmInventory();
+
+	// QUICK ACCESS SLOTS
+
+	// RESOURCE INVENTORY PARAMETERS
+
+	UPROPERTY(EditDefaultsOnly, Category = "Resources")
+	int32 WoodResourceMaxAmount;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Resources")
+	int32 MetalResourceMaxAmount;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Resources")
+	int32 ElectricalResourceMaxAmount;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Resources")
+	int32 ChemicalResourceMaxAmount;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Resources")
+	int32 BioResourceMaxAmount;
+
+	// CHARM INVENTORY PARAMETERS
+
+	UPROPERTY(EditDefaultsOnly, Category = "Charms")
+	int32 CharmInventoryLength;
 
 private:
 
@@ -68,4 +119,7 @@ private:
 
 	UPROPERTY()
 	TArray<FKeyDataSignature> KeyDataList;
+
+	UPROPERTY()
+	TArray<UItemBase*> CharmsList;
 };

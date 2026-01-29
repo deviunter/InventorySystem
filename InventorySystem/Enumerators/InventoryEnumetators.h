@@ -17,6 +17,7 @@ enum class EItemType : uint8
 	Ammunition UMETA(DisplayName = "Ammunition"),
 	Health UMETA(DisplayName = "Health"),
 	Throwable UMETA(DisplayName = "Throwable Weapon"),
+	Charms UMETA(DisplayName = "Charms"),
 	QuestItem UMETA(DisplayName = "Item for Quest"),
 	Garbage UMETA(DisplayName = "Garbage"),
 	Miscellaneous UMETA(DisplayName = "Miscellaneous"),
