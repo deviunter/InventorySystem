@@ -30,4 +30,28 @@ void UItemBase::SetCurrentAmmound(int32 NewAmmound)
 
 void UItemBase::StartUsingItem()
 {
+    if (bIsItemUsingImmediately)
+    {
+        OnItemUsed();
+    }
+}
+
+void UItemBase::StopUsingItem()
+{
+}
+
+void UItemBase::CancelUsingItem()
+{
+}
+
+void UItemBase::AddImmersiveItem_Implementation()
+{
+}
+
+void UItemBase::RemoveImmersiveItem_Implementation()
+{
+}
+
+void UItemBase::OnItemUsed_Implementation()
+{
 }

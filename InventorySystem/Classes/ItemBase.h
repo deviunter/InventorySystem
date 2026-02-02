@@ -37,8 +37,41 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ammound")
 	void SetCurrentAmmound(int32 NewAmmound);
 
-	UFUNCTION(BlueprintCallable)
+	// ITEM USING & INTERACTION
+
+	UFUNCTION(BlueprintCallable, Category = "Item Interaction")
 	void StartUsingItem();
+
+	UFUNCTION(BlueprintCallable, Category = "Item Interaction")
+	void StopUsingItem();
+
+	UFUNCTION(BlueprintCallable, Category = "Item Interaction")
+	void CancelUsingItem();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Item Interaction")
+	void AddImmersiveItem();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Item Interaction")
+	void RemoveImmersiveItem();
+
+	virtual void AddImmersiveItem_Implementation();
+
+	virtual void RemoveImmersiveItem_Implementation();
+
+protected:
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Item Interaction")
+	void OnItemUsed();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Item Interaction")
+	void CallItemSkill();
+
+	virtual void OnItemUsed_Implementation();
+
+	virtual void CallItemSkill_Implementation();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Interaction")
+	bool bIsItemUsingImmediately;
 
 private:
 

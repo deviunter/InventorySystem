@@ -115,6 +115,7 @@ bool UInventoryComponent::AddNewItem(UItemBase* ItemToAdd, int32 TopLeftIndex)
 			}
 		}
 	}
+	ItemToAdd->AddImmersiveItem();
 	AddItemNotification(ItemToAdd, EInventoryAddingType::AddedToNew);
 	return true;
 }
@@ -171,6 +172,7 @@ bool UInventoryComponent::RemoveItem(UItemBase* ItemToRemove, int32 AmmoundToRem
 			}
 			else if (ItemSlots[i]->GetCurrentAmmound() == AmmoundToRemove)
 			{
+				ItemSlots[i]->RemoveImmersiveItem();
 				if (DestroyItem)
 				{
 					ItemSlots[i]->MarkAsGarbage();
