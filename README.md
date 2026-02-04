@@ -46,7 +46,7 @@ Developed in Unreal Engine 5. "Unreal Engine" and its logo are trademarks or reg
 `v. 0.0.1` - Первоначальный коммит
 
 
-`A SKYDREAM INTERACTIVE STORYTELLING TECHNOLOGY` `v 0.0.1`
+
 
 # O REFLECTION ENGINE
 
@@ -58,3 +58,5 @@ Reflection Engine — это модульный фреймворк для Unreal
 Фреймворк построен с акцентом на модульность, проектирование на основе данных и чистую интеграцию C++/Blueprint, что позволяет масштабировать и поддерживать разработку проектов.
 
 <img width="839" height="145" alt="Reflection Engine" src="https://github.com/user-attachments/assets/d4bd0d6a-16e5-48cc-a038-551a7b352c12" />
+
+`A SKYDREAM INTERACTIVE STORYTELLING TECHNOLOGY` `v 0.0.1`
