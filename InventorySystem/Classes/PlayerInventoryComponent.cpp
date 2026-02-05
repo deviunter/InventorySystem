@@ -87,7 +87,7 @@ bool UPlayerInventoryComponent::RemoveResourceAtType(EResourceType ResourceType,
 	return false;
 }
 
-TArray<FResourceSignature> UPlayerInventoryComponent::GetAllResources()
+TArray<FResourceSignature> UPlayerInventoryComponent::GetAllResources() const
 {
 	return ResourceList;
 }
@@ -154,7 +154,7 @@ FKeyDataSignature UPlayerInventoryComponent::GetKeyDataAtID(FName KeyDataID)
 	return FKeyDataSignature();
 }
 
-TArray<FKeyDataSignature> UPlayerInventoryComponent::GetKeyDataCollected()
+TArray<FKeyDataSignature> UPlayerInventoryComponent::GetKeyDataCollected() const
 {
 	return KeyDataList;
 }
@@ -203,12 +203,12 @@ bool UPlayerInventoryComponent::RemoveCharmItemAtIndex(int32 SlotIndex, bool Des
 	return true;
 }
 
-TArray<UItemBase*> UPlayerInventoryComponent::GetCharmItems()
+TArray<UItemBase*> UPlayerInventoryComponent::GetCharmItems() const
 {
 	return CharmsList;
 }
 
-UItemBase* UPlayerInventoryComponent::GetCharmItemAtIndex(int32 ItemIndex)
+UItemBase* UPlayerInventoryComponent::GetCharmItemAtIndex(int32 ItemIndex) const
 {
 	if (IsCharmSlotEmpty(ItemIndex))
 	{
@@ -220,7 +220,7 @@ UItemBase* UPlayerInventoryComponent::GetCharmItemAtIndex(int32 ItemIndex)
 	}
 }
 
-bool UPlayerInventoryComponent::IsCharmSlotEmpty(int32 SlotIndex)
+bool UPlayerInventoryComponent::IsCharmSlotEmpty(int32 SlotIndex) const
 {
 	if (IsValid(CharmsList[SlotIndex]))
 	{

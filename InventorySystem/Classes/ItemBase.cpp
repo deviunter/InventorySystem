@@ -8,17 +8,22 @@
 
 #include "Systems/InventorySystem/Classes/ItemBase.h"
 
-FItemSignature UItemBase::GetItemSignature()
+UItemBase::UItemBase()
+{
+    
+}
+
+FItemSignature UItemBase::GetItemSignature() const
 {
     return ItemSignature;
 }
 
-FIntPoint UItemBase::GetItemDimension()
+FIntPoint UItemBase::GetItemDimension() const
 {
     return ItemSignature.ItemDimension;
 }
 
-int32 UItemBase::GetCurrentAmmound()
+int32 UItemBase::GetCurrentAmmound() const
 {
     return Ammound;
 }

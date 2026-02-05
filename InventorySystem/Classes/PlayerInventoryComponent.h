@@ -40,7 +40,7 @@ public:
 	bool RemoveResourceAtType(EResourceType ResourceType, int32 RemoveAmmound);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Resources")
-	TArray<FResourceSignature> GetAllResources();
+	TArray<FResourceSignature> GetAllResources() const;
 
 	// KEY DATA ITEMS INVENTORY
 
@@ -60,7 +60,7 @@ public:
 	FKeyDataSignature GetKeyDataAtID(FName KeyDataID);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Key Data")
-	TArray<FKeyDataSignature> GetKeyDataCollected();
+	TArray<FKeyDataSignature> GetKeyDataCollected() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Key Data")
 	bool IsKeyDataContains(FName KeyDataID);
@@ -77,13 +77,13 @@ public:
 	bool RemoveCharmItemAtIndex(int32 SlotIndex, bool DestroyItem);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Charms")
-	TArray<UItemBase*> GetCharmItems();
+	TArray<UItemBase*> GetCharmItems() const;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Charms")
-	UItemBase* GetCharmItemAtIndex(int32 ItemIndex);
+	UItemBase* GetCharmItemAtIndex(int32 ItemIndex) const;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Charms")
-	bool IsCharmSlotEmpty(int32 SlotIndex);
+	bool IsCharmSlotEmpty(int32 SlotIndex) const;
 
 	UFUNCTION(BlueprintCallable, Category = "Charms")
 	void RefreshCharmInventory();

@@ -20,19 +20,21 @@ class ABYSSWHISPER_API UItemBase : public UObject
 
 public:
 
+	UItemBase();
+
 	// ITEM DEFAULTS
 
 	UPROPERTY(EditDefaultsOnly)
 	FItemSignature ItemSignature;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	FItemSignature GetItemSignature();
+	FItemSignature GetItemSignature() const;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	FIntPoint GetItemDimension();
+	FIntPoint GetItemDimension() const;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Ammound")
-	int32 GetCurrentAmmound();
+	int32 GetCurrentAmmound() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Ammound")
 	void SetCurrentAmmound(int32 NewAmmound);

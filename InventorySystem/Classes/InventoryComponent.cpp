@@ -371,29 +371,29 @@ int32 UInventoryComponent::CheckReminder(int32 Ammound, UItemBase* CheckedSlot)
 	//return INDEX_NONE;
 }
 
-const FItemTile UInventoryComponent::IndexToTile(int32 Index)
+FItemTile UInventoryComponent::IndexToTile(int32 Index) const
 {
 	return FItemTile(Index % ColumnSize, Index / ColumnSize);
 }
 
-const int32 UInventoryComponent::TileToIndex(FItemTile Tile)
+int32 UInventoryComponent::TileToIndex(FItemTile Tile) const
 {
 	int32 X = Tile.X;
 	int32 Y = ColumnSize * Tile.Y;
 	return X + Y;
 }
 
-UItemBase* UInventoryComponent::GetItemAtIndex(int32 ItemIndex)
+UItemBase* UInventoryComponent::GetItemAtIndex(int32 ItemIndex) const
 {
 	return ItemSlots[ItemIndex];
 }
 
-TArray<UItemBase*> UInventoryComponent::GetAllItemSlots()
+TArray<UItemBase*> UInventoryComponent::GetAllItemSlots() const
 {
 	return ItemSlots;
 }
 
-TMap<UItemBase*, FItemTile> UInventoryComponent::GetAllItemsAndPosition()
+TMap<UItemBase*, FItemTile> UInventoryComponent::GetAllItemsAndPosition() const
 {
 	TMap<UItemBase*, FItemTile> LocalItems;
 	LocalItems.Empty();
@@ -412,12 +412,12 @@ TMap<UItemBase*, FItemTile> UInventoryComponent::GetAllItemsAndPosition()
 
 // I DO THIS LATER (2 FUNC LOWER)
 
-UItemBase* UInventoryComponent::GetItemAtClass(UItemBase* SearchingClass)
+UItemBase* UInventoryComponent::GetItemAtClass(UItemBase* SearchingClass) const
 {
 	return nullptr;
 }
 
-int32 UInventoryComponent::GetItemAmmound(UItemBase* SearchingClass)
+int32 UInventoryComponent::GetItemAmmound(UItemBase* SearchingClass) const
 {
 	return int32();
 }
@@ -431,17 +431,17 @@ void UInventoryComponent::SetNewInventorySize(int32 Column, int32 Row)
 	UpdateInventorySize();
 }
 
-EInventoryType UInventoryComponent::GetInventoryType()
+EInventoryType UInventoryComponent::GetInventoryType() const
 {
 	return InventoryType;
 }
 
-FText UInventoryComponent::GetInventoryName()
+FText UInventoryComponent::GetInventoryName() const
 {
 	return InventoryName;
 }
 
-float UInventoryComponent::GetItemTile()
+float UInventoryComponent::GetItemTile() const
 {
 	return TileSize;
 }
@@ -477,7 +477,7 @@ void UInventoryComponent::GetWidgetClass()
 	}
 }
 
-UUserWidget* UInventoryComponent::GetGridWidget()
+UUserWidget* UInventoryComponent::GetGridWidget() const
 {
 	return InventoryGrid;
 }

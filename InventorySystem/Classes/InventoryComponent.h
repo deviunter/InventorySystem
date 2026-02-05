@@ -74,11 +74,11 @@ public:
 
 	// Converts a linear index to grid coordinates (tile).
 	UFUNCTION(BlueprintPure, Category = "Calculation")
-	const FItemTile IndexToTile(int32 Index);
+	FItemTile IndexToTile(int32 Index) const;
 
 	// Converts grid coordinates to a linear index.
 	UFUNCTION(BlueprintPure, Category = "Calculation")
-	const int32 TileToIndex(FItemTile Tile);
+	int32 TileToIndex(FItemTile Tile) const;
 
 	// Validates if tile coordinates are within inventory bounds.
 	UFUNCTION(BlueprintCallable, Category = "Calculation")
@@ -86,23 +86,23 @@ public:
 
 	// Retrieves item at a specific linear index.
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Item Info")
-	UItemBase* GetItemAtIndex(int32 ItemIndex);
+	UItemBase* GetItemAtIndex(int32 ItemIndex) const;
 
 	// Gets all inventory slots (including empty ones).
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Item Info")
-	TArray<UItemBase*> GetAllItemSlots();
+	TArray<UItemBase*> GetAllItemSlots() const;
 
 	// Gets a map of all items and their grid positions.
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Item Info")
-	TMap<UItemBase*, FItemTile> GetAllItemsAndPosition();
+	TMap<UItemBase*, FItemTile> GetAllItemsAndPosition() const;
 
 	// Finds first item of a specific class.
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Item Info")
-	UItemBase* GetItemAtClass(UItemBase* SearchingClass);
+	UItemBase* GetItemAtClass(UItemBase* SearchingClass) const;
 
 	// Gets total quantity of all items of a specific class.
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Item Info")
-	int32 GetItemAmmound(UItemBase* SearchingClass);
+	int32 GetItemAmmound(UItemBase* SearchingClass) const;
 
 	// Array of all inventory slots. Index corresponds to linear grid index.
 	UPROPERTY(BlueprintReadOnly)
@@ -114,18 +114,18 @@ public:
 
 	// Gets the type of inventory (for specialized behavior).
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory Info")
-	EInventoryType GetInventoryType();
+	EInventoryType GetInventoryType() const;
 
 	// Gets the display name of the inventory.
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory Info")
-	FText GetInventoryName();
+	FText GetInventoryName() const;
 
 	// Gets the UI tile size (in pixels).
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory Info")
-	float GetItemTile();
+	float GetItemTile() const;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory Info")
-	UUserWidget* GetGridWidget(); 
+	UUserWidget* GetGridWidget() const;
 
 	// Number of columns in the inventory grid.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Size")
