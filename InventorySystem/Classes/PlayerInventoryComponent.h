@@ -25,6 +25,8 @@ public:
 
 	UPlayerInventoryComponent();
 
+	virtual void BeginPlay() override;
+
 	/*UFUNCTION(BlueprintCallable, BlueprintPure, Category = "SaveGame")
 	FPlayerInventorySaveSignature SavePlayerInventory();*/
 
@@ -112,7 +114,23 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Charms")
 	int32 CharmInventoryLength;
 
+protected:
+
+	virtual void AddItemNotification(UItemBase* AddedItem, EInventoryAddingType ItemState) override;
+
 private:
+
+	UFUNCTION()
+	void ResourceNotification(EResourceType Resource, int32 AddedAmount);
+
+	UFUNCTION()
+	void KeyDataNotification(FKeyDataSignature KeyData);
+
+	UFUNCTION()
+	void GetDisplayReference();
+
+	UPROPERTY()
+	TObjectPtr<AHUD> PlayerDisplay;
 
 	UPROPERTY()
 	TArray<FResourceSignature> ResourceList;

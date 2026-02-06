@@ -8,7 +8,7 @@
 
 UBatteryItemBase::UBatteryItemBase()
 {
-	// BASED BATTERIES PRESET
+	// TYPE PRESET
 	ItemSignature.bIsStackble = true;
 	ItemSignature.bIsUsable = true;
 	ItemSignature.MaxStackSize = 5;
@@ -24,8 +24,4 @@ void UBatteryItemBase::OnItemUsed_Implementation()
 {
 	Super::OnItemUsed_Implementation();
 	Cast<AExtendedPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->RechargeFlashlight(BatteryConsumptionMultiplier);
-}
-
-void UItemBase::CallItemSkill_Implementation()
-{
 }

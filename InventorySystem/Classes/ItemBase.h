@@ -24,11 +24,8 @@ public:
 
 	// ITEM DEFAULTS
 
-	UPROPERTY(EditDefaultsOnly)
-	FItemSignature ItemSignature;
-
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	FItemSignature GetItemSignature() const;
+	const FItemSignature GetItemSignature();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FIntPoint GetItemDimension() const;
@@ -38,6 +35,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Ammound")
 	void SetCurrentAmmound(int32 NewAmmound);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Item")
+	bool IsItemUsingImmediately() const;
 
 	// ITEM USING & INTERACTION
 
@@ -74,6 +74,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Interaction")
 	bool bIsItemUsingImmediately;
+
+	UPROPERTY(EditDefaultsOnly)
+	FItemSignature ItemSignature;
 
 private:
 

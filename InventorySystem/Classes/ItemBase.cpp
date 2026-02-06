@@ -13,7 +13,7 @@ UItemBase::UItemBase()
     
 }
 
-FItemSignature UItemBase::GetItemSignature() const
+const FItemSignature UItemBase::GetItemSignature()
 {
     return ItemSignature;
 }
@@ -31,6 +31,11 @@ int32 UItemBase::GetCurrentAmmound() const
 void UItemBase::SetCurrentAmmound(int32 NewAmmound)
 {
     Ammound = NewAmmound;
+}
+
+bool UItemBase::IsItemUsingImmediately() const
+{
+    return bIsItemUsingImmediately;
 }
 
 void UItemBase::StartUsingItem()
@@ -58,5 +63,9 @@ void UItemBase::RemoveImmersiveItem_Implementation()
 }
 
 void UItemBase::OnItemUsed_Implementation()
+{
+}
+
+void UItemBase::CallItemSkill_Implementation()
 {
 }

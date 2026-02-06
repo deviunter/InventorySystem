@@ -27,7 +27,7 @@ struct FKeyDataSignature : public FTableRowBase
 	FText KeyDataDescription;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSoftObjectPtr<UStaticMesh> KeyDataMesh;
+	UStaticMesh* KeyDataMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UTexture2D> KeyDataTexture;

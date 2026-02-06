@@ -34,7 +34,7 @@ struct FItemSignature
 	TSoftObjectPtr<UTexture2D> ItemTexture;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSoftObjectPtr<UStaticMesh> ItemMesh;
+	UStaticMesh* ItemMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsUsable;

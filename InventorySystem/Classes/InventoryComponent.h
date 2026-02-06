@@ -35,8 +35,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	// Internal notification when an item is added. Can be overridden in child classes.
-	UFUNCTION()
-	void AddItemNotification(UItemBase* AddedItem, EInventoryAddingType ItemState);
+	virtual void AddItemNotification(UItemBase* AddedItem, EInventoryAddingType ItemState);
 
 public:	
 	

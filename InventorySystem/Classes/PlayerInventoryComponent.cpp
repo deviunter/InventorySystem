@@ -7,6 +7,10 @@
 // Unauthorized copying, modification, distribution, or use is strictly prohibited.
 
 #include "Systems/InventorySystem/Classes/PlayerInventoryComponent.h"
+#include "Core/Interfaces/HeadUpInterface.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "GameFramework/Character.h"
+#include "Systems/InventorySystem/Classes/Items/Charms/CharmItemBase.h"
 
 UPlayerInventoryComponent::UPlayerInventoryComponent()
 {
@@ -33,6 +37,12 @@ UPlayerInventoryComponent::UPlayerInventoryComponent()
 	RefreshCharmInventory();
 }
 
+void UPlayerInventoryComponent::BeginPlay()
+{
+	Super::BeginPlay();
+	GetDisplayReference();
+}
+
 EResourceAddType UPlayerInventoryComponent::AddResouceAtType(EResourceType ResourceType, int32 AddAmmound)
 {
 	for (int32 i = 0; i < ResourceList.Num(); i++)
@@ -42,11 +52,13 @@ EResourceAddType UPlayerInventoryComponent::AddResouceAtType(EResourceType Resou
 			if (ResourceList[i].MaxAmmound + AddAmmound <= ResourceList[i].MaxAmmound)
 			{
 				ResourceList[i].CurrentAmmound += AddAmmound;
+				ResourceNotification(ResourceType, AddAmmound);
 				return EResourceAddType::Success;
 			}
 			else
 			{
 				ResourceList[i].CurrentAmmound = ResourceList[i].MaxAmmound;
+				ResourceNotification(ResourceType, AddAmmound);
 				return EResourceAddType::Partition;
 			}
 		}
@@ -108,6 +120,7 @@ bool UPlayerInventoryComponent::AddKeyDataAtStructure(FKeyDataSignature KeyDataS
 	if (!IsKeyDataContains(KeyDataSignature.KeyDataID))
 	{
 		KeyDataList.Add(KeyDataSignature);
+		KeyDataNotification(KeyDataSignature);
 		return true;
 	}
 	else
@@ -174,10 +187,12 @@ bool UPlayerInventoryComponent::IsKeyDataContains(FName KeyDataID)
 bool UPlayerInventoryComponent::AddCharmItem(UItemBase* ItemToAdd)
 {
 	if (ItemToAdd->GetItemSignature().ItemType != EItemType::Charms) return false;
+	if (!Cast<UCharmItemBase>(ItemToAdd)) return false;
 	for (int32 i = 0; i < CharmsList.Num(); i++)
 	{
 		if (IsCharmSlotEmpty(i))
 		{
+			Cast<UCharmItemBase>(ItemToAdd)->CharmAdded();
 			AddCharmItemToSlot(ItemToAdd, i);
 			return true;
 		}
@@ -188,7 +203,10 @@ bool UPlayerInventoryComponent::AddCharmItem(UItemBase* ItemToAdd)
 bool UPlayerInventoryComponent::AddCharmItemToSlot(UItemBase* ItemToAdd, int32 SlotIndex)
 {
 	if (ItemToAdd->GetItemSignature().ItemType != EItemType::Charms) return false;
+	if (!Cast<UCharmItemBase>(ItemToAdd)) return false;
+	if (!IsCharmSlotEmpty(SlotIndex)) return false;
 	CharmsList[SlotIndex] = ItemToAdd;
+	Cast<UCharmItemBase>(ItemToAdd)->CharmAdded();
 	return true;
 }
 
@@ -199,6 +217,8 @@ bool UPlayerInventoryComponent::RemoveCharmItemAtIndex(int32 SlotIndex, bool Des
 	{
 		CharmsList[SlotIndex]->MarkAsGarbage();
 	}
+	if (!Cast<UCharmItemBase>(CharmsList[SlotIndex])) return false;
+	Cast<UCharmItemBase>(CharmsList[SlotIndex])->CharmRemoved();
 	CharmsList[SlotIndex] = nullptr;
 	return true;
 }
@@ -235,4 +255,34 @@ bool UPlayerInventoryComponent::IsCharmSlotEmpty(int32 SlotIndex) const
 void UPlayerInventoryComponent::RefreshCharmInventory()
 {
 	CharmsList.SetNum(CharmInventoryLength);
+}
+
+void UPlayerInventoryComponent::AddItemNotification(UItemBase* AddedItem, EInventoryAddingType ItemState)
+{
+	Super::AddItemNotification(AddedItem, ItemState);
+	if (ItemState == EInventoryAddingType::NotAdded)
+	{
+		IHeadUpInterface::Execute_InventoryOverloaded((UObject*)PlayerDisplay);
+	}
+	else
+	{
+		IHeadUpInterface::Execute_ItemAdded((UObject*)PlayerDisplay, AddedItem->GetItemSignature());
+	}
+}
+
+void UPlayerInventoryComponent::ResourceNotification(EResourceType Resource, int32 AddedAmount)
+{
+	IHeadUpInterface::Execute_ResourceAdded((UObject*)PlayerDisplay, Resource, AddedAmount);
+}
+
+void UPlayerInventoryComponent::KeyDataNotification(FKeyDataSignature KeyData)
+{
+	IHeadUpInterface::Execute_KeyDataItemAdded((UObject*)PlayerDisplay, KeyData);
+}
+
+void UPlayerInventoryComponent::GetDisplayReference()
+{
+	if (!Cast<ACharacter>(GetOwner())) return;
+	if (!Cast<APlayerController>(Cast<ACharacter>(GetOwner())->GetController())) return;
+	PlayerDisplay = Cast<APlayerController>(Cast<ACharacter>(GetOwner())->GetController())->GetHUD();
 }

@@ -80,12 +80,12 @@ EInventoryAddingType UInventoryComponent::AddItem(UItemBase* ItemToAdd)
 bool UInventoryComponent::AddItemToStack(UItemBase* ItemToAdd, int32 TopLeftIndex)
 {
 	int32 TiledIndex;
-	for (int32 x = IndexToTile(TopLeftIndex).X; x < ItemToAdd->ItemSignature.ItemDimension.X + IndexToTile(TopLeftIndex).X; x++)
+	for (int32 x = IndexToTile(TopLeftIndex).X; x < ItemToAdd->GetItemDimension().X + IndexToTile(TopLeftIndex).X; x++)
 	{
-		for (int32 y = IndexToTile(TopLeftIndex).Y; y < ItemToAdd->ItemSignature.ItemDimension.Y + IndexToTile(TopLeftIndex).Y; y++)
+		for (int32 y = IndexToTile(TopLeftIndex).Y; y < ItemToAdd->GetItemDimension().Y + IndexToTile(TopLeftIndex).Y; y++)
 		{
 			TiledIndex = TileToIndex(FItemTile(x, y));
-			if (IsValid(ItemSlots[TiledIndex]) && ItemToAdd->ItemSignature.ItemID == ItemSlots[TiledIndex]->ItemSignature.ItemID)
+			if (IsValid(ItemSlots[TiledIndex]) && ItemToAdd->GetItemSignature().ItemID == ItemSlots[TiledIndex]->GetItemSignature().ItemID)
 			{
 				ItemSlots[TiledIndex]->SetCurrentAmmound(ItemToAdd->GetCurrentAmmound() + ItemSlots[TiledIndex]->GetCurrentAmmound());
 				ItemToAdd->MarkAsGarbage();
@@ -122,17 +122,17 @@ bool UInventoryComponent::AddNewItem(UItemBase* ItemToAdd, int32 TopLeftIndex)
 
 int32 UInventoryComponent::AddItemToStackWithReminder(UItemBase* ItemToAdd, int32 TopLeftIndex)
 {
-	int32 MaxSize = ItemToAdd->ItemSignature.MaxStackSize;
+	int32 MaxSize = ItemToAdd->GetItemSignature().MaxStackSize;
 	int32 Ammound = ItemToAdd->GetCurrentAmmound();
 	int32 TiledIndex;
 	int32 Reminder = INDEX_NONE;
-	for (int32 x = IndexToTile(TopLeftIndex).X; x < ItemToAdd->ItemSignature.ItemDimension.X + IndexToTile(TopLeftIndex).X; x++)
+	for (int32 x = IndexToTile(TopLeftIndex).X; x < ItemToAdd->GetItemDimension().X + IndexToTile(TopLeftIndex).X; x++)
 	{
-		for (int32 y = IndexToTile(TopLeftIndex).Y; y < ItemToAdd->ItemSignature.ItemDimension.Y + IndexToTile(TopLeftIndex).Y; y++)
+		for (int32 y = IndexToTile(TopLeftIndex).Y; y < ItemToAdd->GetItemDimension().Y + IndexToTile(TopLeftIndex).Y; y++)
 		{
 			TiledIndex = TileToIndex(FItemTile(x, y));
 			int32 CurrentAmmound = ItemSlots[TiledIndex]->GetCurrentAmmound();
-			if (IsValid(ItemToAdd) && ItemToAdd->ItemSignature.ItemID == ItemSlots[TiledIndex]->ItemSignature.ItemID)
+			if (IsValid(ItemToAdd) && ItemToAdd->GetItemSignature().ItemID == ItemSlots[TiledIndex]->GetItemSignature().ItemID)
 			{
 				int32 Addenum = MaxSize - CurrentAmmound;
 				if (Addenum < Ammound)
@@ -158,7 +158,6 @@ int32 UInventoryComponent::AddItemToStackWithReminder(UItemBase* ItemToAdd, int3
 	return INDEX_NONE;
 }
 
-// ÝÒÎ ÑÒÀÐÛÉ ÂÀÐÈÀÍÒ ÐÅÀËÈÇÀÖÈÈ ÝÒÎÉ ÔÓÍÊÖÈÈ, ÎÍ ÈÑÏÐÀÂÅÍ, ÍÎ ÎÍ ÍÅ ÏÐÅÄÓÑÌÀÒÐÈÂÀÅÒ ÒÎÃÎ, ×ÒÎ ÊÎË-ÂÎ ÓÄÀËßÅÌÎÃÎ ÌÎÆÅÒ ÁÛÒÜ ÁÎËÜØÅ ×ÅÌ ÊÎË-ÂÎ ÏÐÅÄÌÅÒÀ Â ÑËÎÒÅ.
 bool UInventoryComponent::RemoveItem(UItemBase* ItemToRemove, int32 AmmoundToRemove, bool DestroyItem)
 {
 	for (int32 i = 0; i < ItemSlots.Num(); i++)
@@ -189,6 +188,7 @@ bool UInventoryComponent::RemoveItem(UItemBase* ItemToRemove, int32 AmmoundToRem
 	return true;
 }
 
+// This function don't needed in ABYSSWHISPER but i do this later for reflection engine inventory in other repo
 bool UInventoryComponent::DropItem(UItemBase* ItemToRemove, int32 Ammound, bool DestroyAfterDrop)
 {
 	return false;
@@ -329,7 +329,7 @@ EStackCheck UInventoryComponent::CheckItemStack(UItemBase* ItemToAdd, int32 TopL
 			{
 				if (IsValid(ItemSlots[TileToIndex(FItemTile(x, y))]))
 				{
-					if (ItemToAdd->ItemSignature.ItemID == ItemSlots[TileToIndex(FItemTile(x, y))]->ItemSignature.ItemID && ItemSlots[TileToIndex(FItemTile(x, y))]->GetCurrentAmmound() < ItemSlots[TileToIndex(FItemTile(x, y))]->ItemSignature.MaxStackSize)
+					if (ItemToAdd->GetItemSignature().ItemID == ItemSlots[TileToIndex(FItemTile(x, y))]->GetItemSignature().ItemID && ItemSlots[TileToIndex(FItemTile(x, y))]->GetCurrentAmmound() < ItemSlots[TileToIndex(FItemTile(x, y))]->GetItemSignature().MaxStackSize)
 					{
 						if (CheckReminder(ItemToAdd->GetCurrentAmmound(), ItemSlots[TileToIndex(FItemTile(x, y))]) != INDEX_NONE)
 						{
@@ -358,7 +358,7 @@ EStackCheck UInventoryComponent::CheckItemStack(UItemBase* ItemToAdd, int32 TopL
 int32 UInventoryComponent::CheckReminder(int32 Ammound, UItemBase* CheckedSlot)
 {
 	int32 CurrentAmmound = CheckedSlot->GetCurrentAmmound();
-	int32 MaxAmmound = CheckedSlot->ItemSignature.MaxStackSize;
+	int32 MaxAmmound = CheckedSlot->GetItemSignature().MaxStackSize;
 	if (CurrentAmmound + Ammound <= MaxAmmound)
 	{
 		return INDEX_NONE;
