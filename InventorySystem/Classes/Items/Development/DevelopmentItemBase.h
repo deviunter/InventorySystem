@@ -9,20 +9,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Systems/InventorySystem/Enumerators/InventoryEnumetators.h"
-#include "ResourceSignature.generated.h"
+#include "Systems/InventorySystem/Classes/ItemBase.h"
+#include "DevelopmentItemBase.generated.h"
 
-USTRUCT(BlueprintType)
-struct FResourceSignature
+UCLASS()
+class ABYSSWHISPER_API UDevelopmentItemBase : public UItemBase
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 CurrentAmmound;
+public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 MaxAmmound;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EResourceType ResourceType;
+	UDevelopmentItemBase();
+	
 };

@@ -6,23 +6,11 @@
 // This software and its source code are the intellectual property of SPYTHOONA INTERACTIVE.
 // Unauthorized copying, modification, distribution, or use is strictly prohibited.
 
-#pragma once
+#include "Systems/InventorySystem/Classes/Items/Development/DevelopmentItemBase.h"
 
-#include "CoreMinimal.h"
-#include "Systems/InventorySystem/Enumerators/InventoryEnumetators.h"
-#include "ResourceSignature.generated.h"
-
-USTRUCT(BlueprintType)
-struct FResourceSignature
+UDevelopmentItemBase::UDevelopmentItemBase()
 {
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 CurrentAmmound;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 MaxAmmound;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EResourceType ResourceType;
-};
+	ItemSignature.ItemType = EItemType::Development;
+	ItemSignature.ItemName = FText::FromString(TEXT("Development Item Base"));
+	ItemSignature.ItemID = FName("Development Item Base");
+}
