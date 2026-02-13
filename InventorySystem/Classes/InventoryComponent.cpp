@@ -289,6 +289,21 @@ bool UInventoryComponent::AddItemToSlot(UItemBase* ItemToAdd, int32 TopLeftIndex
 	return true;
 }
 
+void UInventoryComponent::AddItemAtClass(TSubclassOf<UItemBase> ItemClassToAdd, int32 AddedAmmound)
+{
+	UItemBase* LocalItem;
+	if (IsValid(GetItemAtClass(ItemClassToAdd)))
+	{
+		LocalItem = GetItemAtClass(ItemClassToAdd);
+		LocalItem->SetCurrentAmmound(LocalItem->GetCurrentAmmound() + AddedAmmound);
+	}
+	else
+	{
+		LocalItem = NewObject<UItemBase>(this, ItemClassToAdd);
+		AddItem(LocalItem);
+	}
+}
+
 void UInventoryComponent::AddItemNotification(UItemBase* AddedItem, EInventoryAddingType ItemState)
 {
 	UpdateGridWidget();
@@ -410,19 +425,38 @@ TMap<UItemBase*, FItemTile> UInventoryComponent::GetAllItemsAndPosition() const
 	return LocalItems;
 }
 
-// I DO THIS LATER (2 FUNC LOWER)
-
-UItemBase* UInventoryComponent::GetItemAtClass(UItemBase* SearchingClass) const
+UItemBase* UInventoryComponent::GetItemAtClass(TSubclassOf<UItemBase> SearchingClass) const
 {
+	for (UItemBase* LocalItem : ItemSlots)
+	{
+		if (!IsValid(LocalItem)) continue;
+		if (LocalItem->GetClass() == SearchingClass)
+		{
+			return LocalItem;
+		}
+	}
 	return nullptr;
 }
 
-int32 UInventoryComponent::GetItemAmmound(UItemBase* SearchingClass) const
+int32 UInventoryComponent::GetItemAmmound(TSubclassOf<UItemBase> SearchingClass) const
 {
-	return int32();
+	TArray<UItemBase*> ItemsAtClass;
+	for (UItemBase* LocalItem : ItemSlots)
+	{
+		if (!IsValid(LocalItem)) continue;
+		if (LocalItem->GetClass() == SearchingClass)
+		{
+			ItemsAtClass.Add(LocalItem);
+		}
+	}
+	if (ItemsAtClass.IsEmpty()) return INDEX_NONE;
+	int32 TotalAmmound = 0;
+	for (int32 i = 0; i < ItemsAtClass.Num(); i++)
+	{
+		TotalAmmound += ItemsAtClass[i]->GetCurrentAmmound();
+	}
+	return TotalAmmound;
 }
-
-// I DO THIS LATER ^^
 
 void UInventoryComponent::SetNewInventorySize(int32 Column, int32 Row)
 {

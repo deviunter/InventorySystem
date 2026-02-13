@@ -71,6 +71,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Manage")
 	bool AddItemToSlot(UItemBase* ItemToAdd, int32 TopLeftIndex);
 
+	UFUNCTION(BlueprintCallable, Category = "Manage")
+	void AddItemAtClass(TSubclassOf<UItemBase> ItemClassToAdd, int32 AddedAmmound);
+
 	// Converts a linear index to grid coordinates (tile).
 	UFUNCTION(BlueprintPure, Category = "Calculation")
 	FItemTile IndexToTile(int32 Index) const;
@@ -97,11 +100,11 @@ public:
 
 	// Finds first item of a specific class.
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Item Info")
-	UItemBase* GetItemAtClass(UItemBase* SearchingClass) const;
+	UItemBase* GetItemAtClass(TSubclassOf<UItemBase> SearchingClass) const;
 
 	// Gets total quantity of all items of a specific class.
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Item Info")
-	int32 GetItemAmmound(UItemBase* SearchingClass) const;
+	int32 GetItemAmmound(TSubclassOf<UItemBase> SearchingClass) const;
 
 	// Array of all inventory slots. Index corresponds to linear grid index.
 	UPROPERTY(BlueprintReadOnly)

@@ -12,5 +12,5 @@ UDevelopmentItemBase::UDevelopmentItemBase()
 {
 	ItemSignature.ItemType = EItemType::Development;
 	ItemSignature.ItemName = FText::FromString(TEXT("Development Item Base"));
-	ItemSignature.ItemID = FName("Development Item Base");
+	ItemSignature.ItemID = FName("AIS_DevelopmentItemBase");
 }
