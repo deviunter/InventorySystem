@@ -1,4 +1,4 @@
-// Copyright SPYTHOONA INTERACTIVE.All rights reserved.ABYSSWHISPER is a trademark of SPYTHOONA INTERACTIVE.
+// Copyright SPYTHOONA INTERACTIVE. All rights reserved. ABYSSWHISPER is a trademark of SPYTHOONA INTERACTIVE.
 // Unreal Engine and its logo are trademarks or registered trademarks of Epic Games, Inc.
 // in the United States and elsewhere.All other trademarks are the property of their respective owners.
 
@@ -15,6 +15,7 @@ enum class EItemType : uint8
 {
 	Weapon UMETA(DisplayName = "Weapon"),
 	Ammunition UMETA(DisplayName = "Ammunition"),
+	Battery UMETA(DisplayName = "Battery"),
 	Health UMETA(DisplayName = "Health"),
 	Throwable UMETA(DisplayName = "Throwable Weapon"),
 	Charms UMETA(DisplayName = "Charms"),
