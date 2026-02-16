@@ -34,6 +34,8 @@ Developed in Unreal Engine 5. "Unreal Engine" and its logo are trademarks or reg
 
 # ОПИСАНИЕ ОБНОВЛЕНИЙ
 
+`v. 0.0.13` - Полностью переделан метод UInventoryComponent::RemoveItem - исправлены старые ошибки и добавлена возможность удалять предмет с остатком - например, если удаляемое кол-во 12, а кол-во удаляемого предмета 10, тогда метод найдёт новый предмет и удалит из него недостающее кол-во. Исправлено условие в добавлении ресурсов (UPlayerInventoryComponent::AddResourceAtType)
+
 `v. 0.0.12` - Добавлены parent-классы для различных предметов: UGarbageItemBase, UHealthItemBase, UMiscellaneousItemBase, UQuestItemBase, UThrowableItemBase, UWeaponItemBase. Добавлены два делегата в UInventoryComponent - на подьём предмета и на выбрасывание.
 
 `v. 0.0.11` - Небольшие правки. Добавлены классы UStashInventoryComponent - для особых схронов класс инвентаря предназначенный для особых ящиков лута. Обычные ящики будут спавнить предметы и "выбрасывать" их, а этот будет содержать в себе предметы, не создавая их в мире. Как, например, в STALKER 2 реализован лут с противников или схронов.
