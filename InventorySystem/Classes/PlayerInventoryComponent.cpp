@@ -49,7 +49,7 @@ EResourceAddType UPlayerInventoryComponent::AddResouceAtType(EResourceType Resou
 	{
 		if (ResourceList[i].ResourceType == ResourceType)
 		{
-			if (ResourceList[i].MaxAmmound + AddAmmound <= ResourceList[i].MaxAmmound)
+			if (ResourceList[i].CurrentAmmound + AddAmmound <= ResourceList[i].MaxAmmound)
 			{
 				ResourceList[i].CurrentAmmound += AddAmmound;
 				ResourceNotification(ResourceType, AddAmmound);

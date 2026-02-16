@@ -163,34 +163,83 @@ int32 UInventoryComponent::AddItemToStackWithReminder(UItemBase* ItemToAdd, int3
 
 bool UInventoryComponent::RemoveItem(UItemBase* ItemToRemove, int32 AmmoundToRemove, bool DestroyItem)
 {
-	FName ItemID = ItemToRemove->GetItemSignature().ItemID;
-	for (int32 i = 0; i < ItemSlots.Num(); i++)
+	if (!IsValid(ItemToRemove)) return false;
+	bool bSuccessFinded = false;
+	for (UItemBase* LocalItem : ItemSlots)
 	{
-		if (ItemToRemove == ItemSlots[i])
+		if (LocalItem == ItemToRemove)
 		{
-			if (ItemSlots[i]->GetCurrentAmmound() > AmmoundToRemove)
+			bSuccessFinded = true;
+			break;
+		}
+	}
+	if (!bSuccessFinded) return false;
+	FName ItemID = ItemToRemove->GetItemSignature().ItemID;
+	if (ItemToRemove->GetItemSignature().bIsStackble)
+	{
+		if (ItemToRemove->GetCurrentAmmound() > AmmoundToRemove)
+		{
+			int32 NewAmmo = ItemToRemove->GetCurrentAmmound() - AmmoundToRemove;
+			ItemToRemove->SetCurrentAmmound(NewAmmo);
+			if (OnItemRemoved.IsBound()) OnItemRemoved.Broadcast(ItemID, DestroyItem);
+			UpdateGridWidget();
+			return true;
+		}
+		else if (ItemToRemove->GetCurrentAmmound() == AmmoundToRemove)
+		{
+			ItemToRemove->RemoveImmersiveItem();
+			for (int32 i = 0; i < ItemSlots.Num(); i++)
 			{
-				int32 NewAmmo = ItemSlots[i]->GetCurrentAmmound() - AmmoundToRemove;
-				ItemSlots[i]->SetCurrentAmmound(NewAmmo);
-			}
-			else if (ItemSlots[i]->GetCurrentAmmound() == AmmoundToRemove)
-			{
-				ItemSlots[i]->RemoveImmersiveItem();
-				if (DestroyItem)
+				if (ItemSlots[i] == ItemToRemove)
 				{
-					ItemSlots[i]->MarkAsGarbage();
+					ItemSlots[i] = nullptr;
 				}
-				ItemSlots[i] = nullptr;
 			}
-			else
+			if (DestroyItem) ItemToRemove->MarkAsGarbage();
+			if (OnItemRemoved.IsBound()) OnItemRemoved.Broadcast(ItemID, DestroyItem);
+			UpdateGridWidget();
+			return true;
+		}
+		else
+		{
+			int32 Remainder = AmmoundToRemove - ItemToRemove->GetCurrentAmmound();
+			ItemToRemove->RemoveImmersiveItem();
+			for (int32 i = 0; i < ItemSlots.Num(); i++)
 			{
-				// LATER
+				if (ItemSlots[i] == ItemToRemove)
+				{
+					ItemSlots[i] = nullptr;
+				}
+			}
+			UItemBase* RemainderItem = nullptr;
+			for (UItemBase* LocalItem : ItemSlots)
+			{
+				if (LocalItem->GetClass() == ItemToRemove->GetClass())
+				{
+					RemoveItem(RemainderItem, Remainder, DestroyItem);
+					if (OnItemRemoved.IsBound()) OnItemRemoved.Broadcast(ItemID, DestroyItem);
+					UpdateGridWidget();
+					return true;
+				}
 			}
 		}
 	}
-	if (OnItemRemoved.IsBound()) OnItemRemoved.Broadcast(ItemID, DestroyItem);
-	UpdateGridWidget();
-	return true;
+	else
+	{
+		ItemToRemove->RemoveImmersiveItem();
+		for (int32 i = 0; i < ItemSlots.Num(); i++)
+		{
+			if (ItemSlots[i] == ItemToRemove)
+			{
+				ItemSlots[i] = nullptr;
+			}
+		}
+		if (DestroyItem) ItemToRemove->MarkAsGarbage();
+		if (OnItemRemoved.IsBound()) OnItemRemoved.Broadcast(ItemID, DestroyItem);
+		UpdateGridWidget();
+		return true;
+	}
+	return false;
 }
 
 // This function don't needed in ABYSSWHISPER but i do this later for reflection engine inventory in other repo
@@ -199,6 +248,7 @@ bool UInventoryComponent::DropItem(UItemBase* ItemToRemove, int32 Ammound, bool 
 	return false;
 }
 
+// This function don't needed in ABYSSWHISPER but i do this later for reflection engine inventory in other repo
 bool UInventoryComponent::SplitItem(int32 TopLeftIndex, int32 NewItemAmmound)
 {
 	if (!IsValid(ItemSlots[TopLeftIndex]))
@@ -306,6 +356,7 @@ void UInventoryComponent::AddItemAtClass(TSubclassOf<UItemBase> ItemClassToAdd, 
 	else
 	{
 		LocalItem = NewObject<UItemBase>(this, ItemClassToAdd);
+		LocalItem->SetCurrentAmmound(AddedAmmound);
 		AddItem(LocalItem);
 	}
 }
