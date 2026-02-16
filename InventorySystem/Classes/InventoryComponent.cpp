@@ -90,6 +90,7 @@ bool UInventoryComponent::AddItemToStack(UItemBase* ItemToAdd, int32 TopLeftInde
 				ItemSlots[TiledIndex]->SetCurrentAmmound(ItemToAdd->GetCurrentAmmound() + ItemSlots[TiledIndex]->GetCurrentAmmound());
 				ItemToAdd->MarkAsGarbage();
 				AddItemNotification(ItemSlots[TiledIndex], EInventoryAddingType::AddedToStack);
+				if (OnItemAdded.IsBound()) OnItemAdded.Broadcast(ItemToAdd->GetItemSignature().ItemID);
 				return true;
 			}
 		}
@@ -116,6 +117,7 @@ bool UInventoryComponent::AddNewItem(UItemBase* ItemToAdd, int32 TopLeftIndex)
 		}
 	}
 	ItemToAdd->AddImmersiveItem();
+	if (OnItemAdded.IsBound()) OnItemAdded.Broadcast(ItemToAdd->GetItemSignature().ItemID);
 	AddItemNotification(ItemToAdd, EInventoryAddingType::AddedToNew);
 	return true;
 }
@@ -148,6 +150,7 @@ int32 UInventoryComponent::AddItemToStackWithReminder(UItemBase* ItemToAdd, int3
 			}
 		}
 	}
+	if (OnItemAdded.IsBound()) OnItemAdded.Broadcast(ItemToAdd->GetItemSignature().ItemID);
 	if (Reminder != INDEX_NONE)
 	{
 		ItemToAdd->SetCurrentAmmound(Reminder);
@@ -160,6 +163,7 @@ int32 UInventoryComponent::AddItemToStackWithReminder(UItemBase* ItemToAdd, int3
 
 bool UInventoryComponent::RemoveItem(UItemBase* ItemToRemove, int32 AmmoundToRemove, bool DestroyItem)
 {
+	FName ItemID = ItemToRemove->GetItemSignature().ItemID;
 	for (int32 i = 0; i < ItemSlots.Num(); i++)
 	{
 		if (ItemToRemove == ItemSlots[i])
@@ -184,6 +188,7 @@ bool UInventoryComponent::RemoveItem(UItemBase* ItemToRemove, int32 AmmoundToRem
 			}
 		}
 	}
+	if (OnItemRemoved.IsBound()) OnItemRemoved.Broadcast(ItemID, DestroyItem);
 	UpdateGridWidget();
 	return true;
 }
@@ -284,6 +289,7 @@ bool UInventoryComponent::AddItemToSlot(UItemBase* ItemToAdd, int32 TopLeftIndex
 			}
 		}
 	}
+	if (OnItemAdded.IsBound()) OnItemAdded.Broadcast(ItemToAdd->GetItemSignature().ItemID);
 	UpdateGridWidget();
 	AddItemNotification(ItemToAdd, EInventoryAddingType::AddedToNew);
 	return true;

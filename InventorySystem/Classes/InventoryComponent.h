@@ -11,6 +11,8 @@
 // Can be extended for specialized inventories - for player, storage & special loot boxes
 // Uses a grid system with rows and columns for spatial item placement.
 
+// For a detailed description, please see the "ABYSSWHISPER Technical Overview" document.
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -144,6 +146,14 @@ public:
 	// Display name for the inventory.
 	UPROPERTY(EditDefaultsOnly, Category = "Design")
 	FText InventoryName;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnItemAdded, FName, AddedItemID);
+	UPROPERTY(BlueprintAssignable)
+	FOnItemAdded OnItemAdded;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemRemoved, FName, RemovedItemID, bool, IsItemDestroyed);
+	UPROPERTY(BlueprintAssignable)
+	FOnItemRemoved OnItemRemoved;
 
 private:
 

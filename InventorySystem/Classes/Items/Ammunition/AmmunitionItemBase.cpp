@@ -3,6 +3,7 @@
 // in the United States and elsewhere.All other trademarks are the property of their respective owners.
 
 #include "Systems/InventorySystem/Classes/Items/Ammunition/AmmunitionItemBase.h"
+#include "Player/PlayerCharacter/ExtendedPlayerCharacter.h"
 
 UAmmunitionItemBase::UAmmunitionItemBase()
 {
