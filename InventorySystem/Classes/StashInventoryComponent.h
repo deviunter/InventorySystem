@@ -12,5 +12,9 @@ UCLASS()
 class ABYSSWHISPER_API UStashInventoryComponent : public UInventoryComponent
 {
 	GENERATED_BODY()
+
+public:
+
+	UStashInventoryComponent();
 	
 };

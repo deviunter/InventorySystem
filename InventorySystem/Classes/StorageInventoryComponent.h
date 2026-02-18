@@ -12,5 +12,10 @@ UCLASS()
 class ABYSSWHISPER_API UStorageInventoryComponent : public UInventoryComponent
 {
 	GENERATED_BODY()
+
+public:
+
+	UStorageInventoryComponent();
+
 	
 };

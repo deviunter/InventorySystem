@@ -9,28 +9,36 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Systems/InventorySystem/Structures/ResourceSignature.h"
-#include "Systems/InventorySystem/Structures/ItemSaveInfo.h"
-#include "Systems/InventorySystem/Structures/KeyDataSignature.h"
-#include "PlayerInventorySaveSignature.generated.h"
+#include "Systems/InventorySystem/Classes/ItemBase.h"
+#include "Systems/InventorySystem/Structures/Tile.h"
+#include "ItemSaveInfo.generated.h"
 
 USTRUCT(BlueprintType)
-struct FPlayerInventorySaveSignature
+struct FItemSaveInfo
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FItemSaveInfo> ItemSlotsInfo;
+	TSubclassOf<UItemBase> ItemClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FResourceSignature> Resources;
+	int32 ItemAmmound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FKeyDataSignature> KeyDataItemsInfo;
+	int32 ItemTopLeftIndex;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FSupportInventoryInfo> QuickAccessSlots;
+	FItemTile ItemTile;
+};
+
+USTRUCT(BlueprintType)
+struct FSupportInventoryInfo
+{
+	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FSupportInventoryInfo> CharmInventorySlots;
+	TSubclassOf<UItemBase> ItemClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 SupportInventoryIndex;
 };

@@ -4,3 +4,9 @@
 
 #include "Systems/InventorySystem/Classes/StashInventoryComponent.h"
 
+UStashInventoryComponent::UStashInventoryComponent()
+{
+	InventoryType = EInventoryType::LootboxInventory;
+	RowSize = 6;
+	ColumnSize = 10;
+}

@@ -92,6 +92,15 @@ public:
 
 	// QUICK ACCESS SLOTS
 
+	UFUNCTION(BlueprintCallable, Category = "Quick Access")
+	UItemBase* GetQuickAccessSlotAtIndex(int32 SlotIndex);
+
+	UFUNCTION(BlueprintCallable, Category = "Quick Access")
+	int32 CheckEqualsWithQuickAccess(UItemBase* ItemToCheck);
+
+	UFUNCTION(BlueprintCallable, Category = "Quick Access")
+	bool SetQuickAccessSlot(UItemBase* ItemToAdd, int32 Index);
+
 	// RESOURCE INVENTORY PARAMETERS
 
 	UPROPERTY(EditDefaultsOnly, Category = "Resources")
@@ -113,6 +122,14 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Charms")
 	int32 CharmInventoryLength;
+
+	// PLAYER INVENTORY SAVING
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory Save")
+	FPlayerInventorySaveSignature GetPlayerInventorySaveData();
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory Save")
+	void SetPlayerInventoryLoadData(FPlayerInventorySaveSignature InventorySaveData);
 
 protected:
 
@@ -140,4 +157,7 @@ private:
 
 	UPROPERTY()
 	TArray<UItemBase*> CharmsList;
+
+	UPROPERTY()
+	TArray<UItemBase*> QuickAccessSlots;
 };

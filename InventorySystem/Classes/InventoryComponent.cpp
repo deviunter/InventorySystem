@@ -563,3 +563,32 @@ UUserWidget* UInventoryComponent::GetGridWidget() const
 {
 	return InventoryGrid;
 }
+
+TArray<FItemSaveInfo> UInventoryComponent::GetInventorySaveData()
+{
+	TArray<UItemBase*> ClearedItems;
+	TArray<FItemSaveInfo> ItemsInfo;
+	for (int32 i = 0; i < ItemSlots.Num(); i++)
+	{
+		if (!IsValid(ItemSlots[i])) continue;
+		if (ClearedItems.Contains(ItemSlots[i])) continue;
+		ClearedItems.Add(ItemSlots[i]);
+		FItemSaveInfo ForedItem;
+		ForedItem.ItemClass = ItemSlots[i]->GetClass();
+		ForedItem.ItemAmmound = ItemSlots[i]->GetCurrentAmmound();
+		ForedItem.ItemTopLeftIndex = i;
+		ForedItem.ItemTile = IndexToTile(i);
+		ItemsInfo.Add(ForedItem);
+	}
+	return ItemsInfo;
+}
+
+void UInventoryComponent::SetInventoryLoadData(TArray<FItemSaveInfo> InventoryInfo)
+{
+	for (FItemSaveInfo LocalItem : InventoryInfo)
+	{
+		UItemBase* CreatedItem = NewObject<UItemBase>(this, LocalItem.ItemClass);
+		CreatedItem->SetCurrentAmmound(LocalItem.ItemAmmound);
+		AddItemToSlot(CreatedItem, LocalItem.ItemTopLeftIndex);
+	}
+}

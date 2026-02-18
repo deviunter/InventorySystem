@@ -20,6 +20,7 @@
 #include "Systems/InventorySystem/Enumerators/InventoryEnumetators.h"
 #include "Systems/InventorySystem/Classes/ItemBase.h"
 #include "Blueprint/UserWidget.h"
+#include "Systems/InventorySystem/Structures/ItemSaveInfo.h"
 #include "InventoryComponent.generated.h"
 
 
@@ -38,6 +39,14 @@ protected:
 
 	// Internal notification when an item is added. Can be overridden in child classes.
 	virtual void AddItemNotification(UItemBase* AddedItem, EInventoryAddingType ItemState);
+
+	// Type of inventory (affects behavior and UI).
+	UPROPERTY()
+	EInventoryType InventoryType;
+
+	// Display name for the inventory.
+	UPROPERTY(EditDefaultsOnly, Category = "Design")
+	FText InventoryName;
 
 public:	
 	
@@ -130,6 +139,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory Info")
 	UUserWidget* GetGridWidget() const;
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory Save")
+	TArray<FItemSaveInfo> GetInventorySaveData();
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory Save")
+	void SetInventoryLoadData(TArray<FItemSaveInfo> InventoryInfo);
+
 	// Number of columns in the inventory grid.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Size")
 	int32 ColumnSize;
@@ -141,10 +156,6 @@ public:
 	// Size of each inventory tile in UI (pixels).
 	UPROPERTY(EditDefaultsOnly, Category = "Design")
 	float TileSize;
-
-	// Display name for the inventory.
-	UPROPERTY(EditDefaultsOnly, Category = "Design")
-	FText InventoryName;
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnItemAdded, FName, AddedItemID);
 	UPROPERTY(BlueprintAssignable)
@@ -196,8 +207,4 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UUserWidget> InventoryGrid;
-
-	// Type of inventory (affects behavior and UI).
-	UPROPERTY()
-	EInventoryType InventoryType;
 };

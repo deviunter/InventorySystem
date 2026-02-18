@@ -4,3 +4,9 @@
 
 #include "Systems/InventorySystem/Classes/StorageInventoryComponent.h"
 
+UStorageInventoryComponent::UStorageInventoryComponent()
+{
+	InventoryType = EInventoryType::StorageInventory;
+	RowSize = 6;
+	ColumnSize = 10;
+}

@@ -14,14 +14,14 @@
 
 UPlayerInventoryComponent::UPlayerInventoryComponent()
 {
-	// SET UP RESOURCE ARRAY TYPES MAX AMOUNT
+	// RESOURCE LIST MAX AMMOUND SETUP
 	WoodResourceMaxAmount = 20;
 	MetalResourceMaxAmount = 25;
 	ElectricalResourceMaxAmount = 15;
 	ChemicalResourceMaxAmount = 30;
 	BioResourceMaxAmount = 35;
 
-	// SET UP RESOURCE ARRAY
+	// RESOURCE LIST SETUP
 	ResourceList.Empty();
 	ResourceList.Add(FResourceSignature(0, WoodResourceMaxAmount, EResourceType::WoodResource));
 	ResourceList.Add(FResourceSignature(0, MetalResourceMaxAmount, EResourceType::MetalResource));
@@ -29,12 +29,18 @@ UPlayerInventoryComponent::UPlayerInventoryComponent()
 	ResourceList.Add(FResourceSignature(0, ChemicalResourceMaxAmount, EResourceType::ChemicalResource));
 	ResourceList.Add(FResourceSignature(0, BioResourceMaxAmount, EResourceType::BioResource));
 
-	// SET UP KEY DATA ARRAY
+	// KEY DATA LIST SETUP
 	KeyDataList.Empty();
 
-	// SET UP CHARMS INVENTORY
+	// CHARM INVENTORY SETUP
 	CharmInventoryLength = 3;
 	RefreshCharmInventory();
+
+	// QUICK ACCESS SLOTS SETUP
+	QuickAccessSlots.SetNum(12);
+
+	// CLASS SETUP
+	InventoryType = EInventoryType::PlayerInventory;
 }
 
 void UPlayerInventoryComponent::BeginPlay()
@@ -255,6 +261,94 @@ bool UPlayerInventoryComponent::IsCharmSlotEmpty(int32 SlotIndex) const
 void UPlayerInventoryComponent::RefreshCharmInventory()
 {
 	CharmsList.SetNum(CharmInventoryLength);
+}
+
+UItemBase* UPlayerInventoryComponent::GetQuickAccessSlotAtIndex(int32 SlotIndex)
+{
+	if (!QuickAccessSlots.IsValidIndex(SlotIndex)) return nullptr;
+	if (IsValid(QuickAccessSlots[SlotIndex])) return QuickAccessSlots[SlotIndex];
+	return nullptr;
+}
+
+int32 UPlayerInventoryComponent::CheckEqualsWithQuickAccess(UItemBase* ItemToCheck)
+{
+	for (int32 i = 0; i < QuickAccessSlots.Num(); i++)
+	{
+		if (ItemToCheck->GetClass() == QuickAccessSlots[i]->GetClass())
+		{
+			return i;
+		}
+	}
+	return INDEX_NONE;
+}
+
+bool UPlayerInventoryComponent::SetQuickAccessSlot(UItemBase* ItemToAdd, int32 Index)
+{
+	if (!IsValid(ItemToAdd)) return false;
+	if (!QuickAccessSlots.IsValidIndex(Index)) return false;
+	if (ItemToAdd->GetClass() == QuickAccessSlots[Index]->GetClass()) return false;
+	for (int32 i = 0; i < QuickAccessSlots.Num(); i++)
+	{
+		if (ItemToAdd->GetClass() == QuickAccessSlots[i]->GetClass())
+		{
+			QuickAccessSlots[i] = nullptr;
+			break;
+		}
+	}
+	QuickAccessSlots[Index] = ItemToAdd;
+	return true;
+}
+
+FPlayerInventorySaveSignature UPlayerInventoryComponent::GetPlayerInventorySaveData()
+{
+	FPlayerInventorySaveSignature LocalSave;
+	TArray<FSupportInventoryInfo> CharmInfo;
+	TArray<FSupportInventoryInfo> QuickAccessInfo;
+	for (int32 i = 0; i < CharmsList.Num(); i++)
+	{
+		if (IsValid(CharmsList[i]))
+		{
+			FSupportInventoryInfo LocalItem;
+			LocalItem.ItemClass = CharmsList[i]->GetClass();
+			LocalItem.SupportInventoryIndex = i;
+			CharmInfo.Add(LocalItem);
+		}
+	}
+	for (int32 i = 0; i < QuickAccessSlots.Num(); i++)
+	{
+		if (IsValid(QuickAccessSlots[i]))
+		{
+			FSupportInventoryInfo LocalQAItem;
+			LocalQAItem.ItemClass = QuickAccessSlots[i]->GetClass();
+			LocalQAItem.SupportInventoryIndex = i;
+			QuickAccessInfo.Add(LocalQAItem);
+		}
+	}
+	LocalSave.ItemSlotsInfo = GetInventorySaveData();
+	LocalSave.Resources = ResourceList;
+	LocalSave.KeyDataItemsInfo = KeyDataList;
+	LocalSave.CharmInventorySlots = CharmInfo;
+	LocalSave.QuickAccessSlots = QuickAccessInfo;
+	return LocalSave;
+}
+
+void UPlayerInventoryComponent::SetPlayerInventoryLoadData(FPlayerInventorySaveSignature InventorySaveData)
+{
+	SetInventoryLoadData(InventorySaveData.ItemSlotsInfo);
+	ResourceList = InventorySaveData.Resources;
+	KeyDataList = InventorySaveData.KeyDataItemsInfo;
+	for (int32 i = 0; i < InventorySaveData.QuickAccessSlots.Num(); i++)
+	{
+		if (IsValid(GetItemAtClass(InventorySaveData.QuickAccessSlots[i].ItemClass)))
+		{
+			SetQuickAccessSlot(GetItemAtClass(InventorySaveData.QuickAccessSlots[i].ItemClass), i);
+		}
+	}
+	for (int32 i = 0; i < InventorySaveData.CharmInventorySlots.Num(); i++)
+	{
+		UItemBase* LocalCharm = NewObject<UItemBase>(this, InventorySaveData.CharmInventorySlots[i].ItemClass);
+		AddCharmItemToSlot(LocalCharm, i);
+	}
 }
 
 void UPlayerInventoryComponent::AddItemNotification(UItemBase* AddedItem, EInventoryAddingType ItemState)
