@@ -292,30 +292,21 @@ bool UInventoryComponent::UseItem(UItemBase* ItemToUse)
 
 bool UInventoryComponent::IsRoomAvailable(UItemBase* ItemToAdd, int32 TopLeftIndex)
 {
+	/*if (!IsValid(ItemToAdd)) return false;*/
+	FIntPoint ItemDimension = ItemToAdd->GetItemDimension();
 	FItemTile StartTile = IndexToTile(TopLeftIndex);
-	if (!IsTileValid(StartTile))
-	{
-		return false;
-	}
-	if (StartTile.X + ItemToAdd->GetItemDimension().X > ColumnSize || StartTile.Y + ItemToAdd->GetItemDimension().Y > RowSize)
-	{
-		return false;
-	}
+	if (!IsTileValid(StartTile)) return false;
+	if (StartTile.X + ItemDimension.X > ColumnSize || StartTile.Y + ItemDimension.Y > RowSize) return false;
 	FItemTile Tile;
-	for (int32 x = IndexToTile(TopLeftIndex).X; x < ItemToAdd->GetItemDimension().X + IndexToTile(TopLeftIndex).X; x++)
+	for (int32 x = StartTile.X; x < ItemDimension.X + StartTile.X; x++)
 	{
-		for (int32 y = IndexToTile(TopLeftIndex).Y; y < ItemToAdd->GetItemDimension().Y + IndexToTile(TopLeftIndex).Y; y++)
+		for (int32 y = StartTile.Y; y < ItemDimension.Y + StartTile.Y; y++)
 		{
 			Tile = FItemTile(x, y);
-			if (!IsTileValid(Tile))
-			{
-				return false;
-			}
-			if (IsValid(ItemSlots[TileToIndex(Tile)]))
-			{
-				return false;
-			}
-			
+			if (!IsTileValid(Tile)) return false;
+			int32 Index = TileToIndex(Tile);
+			if (IsValid(ItemSlots[Index])) return false;
+			if (!ItemSlots.IsValidIndex(Index) || ItemSlots[Index] != nullptr) return false;
 		}
 	}
 	return true;

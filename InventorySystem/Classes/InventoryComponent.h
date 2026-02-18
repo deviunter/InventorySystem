@@ -43,7 +43,6 @@ public:
 	
 	// BLUEPRINT VISIBLE FUNCTIONS
 
-
 	// Attempts to add an item to the inventory. Automatically handles stacking and placement.
 	UFUNCTION(BlueprintCallable, Category = "Manage")
 	EInventoryAddingType AddItem(UItemBase* ItemToAdd);
