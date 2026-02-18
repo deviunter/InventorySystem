@@ -34,6 +34,8 @@ Developed in Unreal Engine 5. "Unreal Engine" and its logo are trademarks or reg
 
 # ОПИСАНИЕ ОБНОВЛЕНИЙ
 
+`v. 0.0.15` - Последняя версия системы инвентаря из игры ABYSSWHISPER. В классы UInventoryComponent и UPlayerInventoryComponent добавлены методы для сохранения и загрузки. 
+
 `v. 0.0.14` - Доработан метод UInventoryComponent::IsRoomAvailable, исправлена ошибка вычисления больших предметов
 
 `v. 0.0.13` - Полностью переделан метод UInventoryComponent::RemoveItem - исправлены старые ошибки и добавлена возможность удалять предмет с остатком - например, если удаляемое кол-во 12, а кол-во удаляемого предмета 10, тогда метод найдёт новый предмет и удалит из него недостающее кол-во. Исправлено условие в добавлении ресурсов (UPlayerInventoryComponent::AddResourceAtType)
