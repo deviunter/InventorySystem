@@ -5,7 +5,7 @@
 
 Developed in Unreal Engine 5. "Unreal Engine" and its logo are trademarks or registered trademarks of Epic Games, Inc.
 
->[!CAUTION]
+>[!IMPORTANT]
 >Важно! В данный момент эта система не готова к интеграции в другие проекты, сейчас это просто наглядное пособие как можно делать, и демонстрация навыков.
 >Если просто скачать сейчас эту систему и вставить её в свой проект, она не будет работать, так как привязана к проекту ABYSSWHISPER.
 
