@@ -30,6 +30,8 @@ Developed in Unreal Engine 5. "Unreal Engine" and its logo are trademarks or reg
 
 # ОПИСАНИЕ ОБНОВЛЕНИЙ
 
+`v. 0.0.16` - Теперь метод AddImmersive вызывается в AddItem и AddItemToStack только если это инвентарь игрока. Добавлена базовая заготовка для системы адаптивного лута.
+
 `v. 0.0.15` - Последняя версия системы инвентаря из игры ABYSSWHISPER. В классы UInventoryComponent и UPlayerInventoryComponent добавлены методы для сохранения и загрузки. 
 
 `v. 0.0.14` - Доработан метод UInventoryComponent::IsRoomAvailable, исправлена ошибка вычисления больших предметов
