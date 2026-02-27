@@ -116,7 +116,7 @@ bool UInventoryComponent::AddNewItem(UItemBase* ItemToAdd, int32 TopLeftIndex)
 			}
 		}
 	}
-	ItemToAdd->AddImmersiveItem();
+	if(InventoryType == EInventoryType::PlayerInventory) ItemToAdd->AddImmersiveItem();
 	if (OnItemAdded.IsBound()) OnItemAdded.Broadcast(ItemToAdd->GetItemSignature().ItemID);
 	AddItemNotification(ItemToAdd, EInventoryAddingType::AddedToNew);
 	return true;
@@ -332,6 +332,7 @@ bool UInventoryComponent::AddItemToSlot(UItemBase* ItemToAdd, int32 TopLeftIndex
 	}
 	if (OnItemAdded.IsBound()) OnItemAdded.Broadcast(ItemToAdd->GetItemSignature().ItemID);
 	UpdateGridWidget();
+	if (InventoryType == EInventoryType::PlayerInventory) ItemToAdd->AddImmersiveItem();
 	AddItemNotification(ItemToAdd, EInventoryAddingType::AddedToNew);
 	return true;
 }

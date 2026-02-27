@@ -6,6 +6,7 @@
 
 #include "CoreMinimal.h"
 #include "Systems/InventorySystem/Classes/InventoryComponent.h"
+#include "Systems/InventorySystem/DataAssets/LootDataAsset.h"
 #include "StashInventoryComponent.generated.h"
 
 UCLASS()
@@ -16,5 +17,11 @@ class ABYSSWHISPER_API UStashInventoryComponent : public UInventoryComponent
 public:
 
 	UStashInventoryComponent();
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<ULootDataAsset> LootInfo;
+
+	UFUNCTION(BlueprintCallable, Category = "Stash Optimization")
+	void OnPlayerIsNear();
 	
 };

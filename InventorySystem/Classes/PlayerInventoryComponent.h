@@ -27,15 +27,12 @@ public:
 
 	virtual void BeginPlay() override;
 
-	/*UFUNCTION(BlueprintCallable, BlueprintPure, Category = "SaveGame")
-	FPlayerInventorySaveSignature SavePlayerInventory();*/
-
 	// RESOURCES INVENTORY
 
 	UFUNCTION(BlueprintCallable, Category = "Resources")
 	EResourceAddType AddResouceAtType(EResourceType ResourceType, int32 AddAmmound);
 
-	UFUNCTION(BlueprintCallable, Category = "Resources")
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Resources")
 	FResourceSignature GetResourceAtType(EResourceType ResourceType);
 
 	UFUNCTION(BlueprintCallable, Category = "Resources")

@@ -71,3 +71,12 @@ enum class EResourceAddType : uint8
 	Partition,
 	Error
 };
+
+UENUM(BlueprintType)
+enum class ESpawnLootType : uint8
+{
+	DefaultLootWithoutDifficult,
+	DefaultLootWithDifficult,
+	ExclusiveLoot,
+	DebugLoot
+};
