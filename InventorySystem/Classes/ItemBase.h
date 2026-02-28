@@ -37,7 +37,7 @@ public:
 	void SetCurrentAmmound(int32 NewAmmound);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Item")
-	bool IsItemUsingImmediately() const;
+	bool GetIsItemReusable() const;
 
 	// ITEM USING & INTERACTION
 
@@ -72,8 +72,8 @@ protected:
 
 	virtual void CallItemSkill_Implementation();
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Interaction")
-	bool bIsItemUsingImmediately;
+	UPROPERTY(EditDefaultsOnly)
+	bool bIsItemReusable;
 
 	UPROPERTY(EditDefaultsOnly)
 	FItemSignature ItemSignature;

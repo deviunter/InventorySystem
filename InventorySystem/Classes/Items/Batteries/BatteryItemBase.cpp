@@ -18,7 +18,7 @@ UBatteryItemBase::UBatteryItemBase()
 	ItemSignature.MaxStackSize = 5;
 	ItemSignature.ItemType = EItemType::Battery;
 	ItemSignature.ItemDimension = FIntPoint(1, 1);
-	bIsItemUsingImmediately = true;
+	bIsItemReusable = false;
 
 	// CURRENT CLASS PRESET
 	ItemSignature.ItemName = FText::FromString(TEXT("Battery Item Base"));

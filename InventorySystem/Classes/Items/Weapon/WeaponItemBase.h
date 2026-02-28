@@ -22,6 +22,8 @@ public:
 
 	virtual void RemoveImmersiveItem_Implementation() override;
 
+	virtual void OnItemUsed_Implementation() override;
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon Item Base")

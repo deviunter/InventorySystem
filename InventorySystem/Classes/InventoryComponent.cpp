@@ -226,7 +226,7 @@ bool UInventoryComponent::RemoveItem(UItemBase* ItemToRemove, int32 AmmoundToRem
 	}
 	else
 	{
-		ItemToRemove->RemoveImmersiveItem();
+		if (InventoryType == EInventoryType::PlayerInventory) ItemToRemove->RemoveImmersiveItem();
 		for (int32 i = 0; i < ItemSlots.Num(); i++)
 		{
 			if (ItemSlots[i] == ItemToRemove)
@@ -283,10 +283,9 @@ bool UInventoryComponent::SplitItem(int32 TopLeftIndex, int32 NewItemAmmound)
 
 bool UInventoryComponent::UseItem(UItemBase* ItemToUse)
 {
-	if (IsValid(ItemToUse))
-	{
-		ItemToUse->StartUsingItem();
-	}
+	if (!IsValid(ItemToUse)) return false;
+	ItemToUse->StartUsingItem();
+	if(!ItemToUse->GetIsItemReusable()) RemoveItem(ItemToUse, 1, false);
 	return true;
 }
 

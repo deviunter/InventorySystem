@@ -9,7 +9,7 @@
 #include "Systems/InventorySystem/DataAssets/LootDataAsset.h"
 #include "StashInventoryComponent.generated.h"
 
-UCLASS()
+UCLASS( ClassGroup = (Custom), meta = (BlueprintSpawnableComponent) )
 class ABYSSWHISPER_API UStashInventoryComponent : public UInventoryComponent
 {
 	GENERATED_BODY()

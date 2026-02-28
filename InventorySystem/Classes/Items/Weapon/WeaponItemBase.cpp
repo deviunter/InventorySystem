@@ -14,7 +14,7 @@ UWeaponItemBase::UWeaponItemBase()
 	ItemSignature.bIsUsable = true;
 	ItemSignature.MaxStackSize = INDEX_NONE;
 	ItemSignature.ItemType = EItemType::Weapon;
-	bIsItemUsingImmediately = false;
+	bIsItemReusable = true;
 
 	// CURRENT CLASS PRESET
 	ItemSignature.ItemName = FText::FromString(TEXT("Weapon Item Base"));
@@ -31,4 +31,18 @@ void UWeaponItemBase::RemoveImmersiveItem_Implementation()
 {
 	Super::RemoveImmersiveItem_Implementation();
 	Cast<AExtendedPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->RemoveWeaponFromPlayer(WeaponClass);
+}
+
+void UWeaponItemBase::OnItemUsed_Implementation()
+{
+	TObjectPtr<AExtendedPlayerCharacter> Player = Cast<AExtendedPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (Player->CurrentWeapon)
+	{
+		if (Player->CurrentWeapon->GetChildActorClass() == WeaponClass) return;
+		Player->UnequipWeapon();
+	}
+	else
+	{
+		Player->EquipWeaponAtClass(WeaponClass);
+	}
 }

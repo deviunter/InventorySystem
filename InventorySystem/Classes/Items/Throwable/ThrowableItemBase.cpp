@@ -12,6 +12,7 @@ UThrowableItemBase::UThrowableItemBase()
 	ItemSignature.bIsUsable = true;
 	ItemSignature.ItemType = EItemType::Throwable;
 	ItemSignature.MaxStackSize = 5;
+	bIsItemReusable = true;
 
 	// CURRENT CLASS PRESET
 	ItemSignature.ItemName = FText::FromString(TEXT("Throwable Item Base"));

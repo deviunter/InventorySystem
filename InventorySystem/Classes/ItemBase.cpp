@@ -33,17 +33,14 @@ void UItemBase::SetCurrentAmmound(int32 NewAmmound)
     Ammound = NewAmmound;
 }
 
-bool UItemBase::IsItemUsingImmediately() const
+bool UItemBase::GetIsItemReusable() const
 {
-    return bIsItemUsingImmediately;
+    return bIsItemReusable;
 }
 
 void UItemBase::StartUsingItem()
 {
-    if (bIsItemUsingImmediately)
-    {
-        OnItemUsed();
-    }
+    OnItemUsed();
 }
 
 void UItemBase::StopUsingItem()
