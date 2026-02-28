@@ -105,15 +105,8 @@ bool UInventoryComponent::AddNewItem(UItemBase* ItemToAdd, int32 TopLeftIndex)
 	{
 		for (int32 y = IndexToTile(TopLeftIndex).Y; y < ItemToAdd->GetItemDimension().Y + IndexToTile(TopLeftIndex).Y; y++)
 		{
-			if (x + ItemToAdd->GetItemDimension().X <= ColumnSize && y + ItemToAdd->GetItemDimension().Y <= RowSize)
-			{
-				Tile = FItemTile(x, y);
-				ItemSlots[TileToIndex(Tile)] = ItemToAdd;
-			}
-			else
-			{
-				break;
-			}
+			Tile = FItemTile(x, y);
+			ItemSlots[TileToIndex(Tile)] = ItemToAdd;
 		}
 	}
 	if(InventoryType == EInventoryType::PlayerInventory) ItemToAdd->AddImmersiveItem();
@@ -318,15 +311,8 @@ bool UInventoryComponent::AddItemToSlot(UItemBase* ItemToAdd, int32 TopLeftIndex
 	{
 		for (int32 y = IndexToTile(TopLeftIndex).Y; y < ItemToAdd->GetItemDimension().Y + IndexToTile(TopLeftIndex).Y; y++)
 		{
-			if (x + ItemToAdd->GetItemDimension().X <= ColumnSize && y + ItemToAdd->GetItemDimension().Y <= RowSize)
-			{
-				Tile = FItemTile(x, y);
-				ItemSlots[TileToIndex(Tile)] = ItemToAdd;
-			}
-			else
-			{
-				break;
-			}
+			Tile = FItemTile(x, y);
+			ItemSlots[TileToIndex(Tile)] = ItemToAdd;
 		}
 	}
 	if (OnItemAdded.IsBound()) OnItemAdded.Broadcast(ItemToAdd->GetItemSignature().ItemID);

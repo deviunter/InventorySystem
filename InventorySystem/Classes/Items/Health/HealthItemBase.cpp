@@ -3,6 +3,8 @@
 // in the United States and elsewhere.All other trademarks are the property of their respective owners.
 
 #include "Systems/InventorySystem/Classes/Items/Health/HealthItemBase.h"
+#include "Player/PlayerCharacter/DefaultPlayerCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 UHealthItemBase::UHealthItemBase()
 {
@@ -15,4 +17,19 @@ UHealthItemBase::UHealthItemBase()
 	// CURRENT CLASS PRESET
 	ItemSignature.ItemName = FText::FromString(TEXT("Health Item Base"));
 	ItemSignature.ItemID = FName("AIS_HealthItemBase");
+}
+
+void UHealthItemBase::OnItemUsed_Implementation()
+{
+	if (!Cast<ADefaultPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))) return;
+	TObjectPtr<ADefaultPlayerCharacter> Player = Cast<ADefaultPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	float ValueToAppend = (PercentToAdd / Player->HealthComponent->MaxHealth) * 100.0f;
+	if (PercentToAdd == 100.0f)
+	{
+		Player->HealthComponent->DoHealth(Player->HealthComponent->MaxHealth);
+	}
+	else
+	{
+		Player->HealthComponent->DoHealth(ValueToAppend);
+	}
 }

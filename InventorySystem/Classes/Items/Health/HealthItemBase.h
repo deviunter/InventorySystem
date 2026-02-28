@@ -16,4 +16,11 @@ class ABYSSWHISPER_API UHealthItemBase : public UItemBase
 public:
 
 	UHealthItemBase();
+
+	virtual void OnItemUsed_Implementation() override;
+
+protected:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Item")
+	float PercentToAdd;
 };
