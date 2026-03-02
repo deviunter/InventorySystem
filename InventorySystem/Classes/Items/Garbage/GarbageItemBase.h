@@ -6,6 +6,7 @@
 
 #include "CoreMinimal.h"
 #include "Systems/InventorySystem/Classes/ItemBase.h"
+#include "Systems/InventorySystem/Structures/CraftingStructures.h"
 #include "GarbageItemBase.generated.h"
 
 UCLASS()
@@ -16,5 +17,11 @@ class ABYSSWHISPER_API UGarbageItemBase : public UItemBase
 public:
 
 	UGarbageItemBase();
-	
+
+	virtual void OnItemUsed_Implementation() override;
+
+protected:
+
+	UPROPERTY(EditDefaultsOnly)
+	TArray<FResourceCost> AddedResources;
 };

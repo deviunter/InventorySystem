@@ -81,6 +81,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Charms")
 	UItemBase* GetCharmItemAtIndex(int32 ItemIndex) const;
 
+	UFUNCTION(BlueprintCallable, Category = "Charms")
+	int32 GetCharmItemAtClass(TSubclassOf<UCharmItemBase> CharmClass);
+
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Charms")
 	bool IsCharmSlotEmpty(int32 SlotIndex) const;
 

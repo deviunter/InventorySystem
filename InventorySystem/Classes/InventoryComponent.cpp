@@ -434,6 +434,7 @@ int32 UInventoryComponent::TileToIndex(FItemTile Tile) const
 
 UItemBase* UInventoryComponent::GetItemAtIndex(int32 ItemIndex) const
 {
+	if (!ItemSlots.IsValidIndex(ItemIndex)) return nullptr;
 	return ItemSlots[ItemIndex];
 }
 

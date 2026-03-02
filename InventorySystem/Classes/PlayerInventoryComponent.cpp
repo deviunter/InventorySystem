@@ -246,6 +246,18 @@ UItemBase* UPlayerInventoryComponent::GetCharmItemAtIndex(int32 ItemIndex) const
 	}
 }
 
+int32 UPlayerInventoryComponent::GetCharmItemAtClass(TSubclassOf<UCharmItemBase> CharmClass)
+{
+	for (int32 i = 0; i < CharmsList.Num(); i++)
+	{
+		if (CharmsList[i]->GetClass() == CharmClass)
+		{
+			return i;
+		}
+	}
+	return INDEX_NONE;
+}
+
 bool UPlayerInventoryComponent::IsCharmSlotEmpty(int32 SlotIndex) const
 {
 	if (IsValid(CharmsList[SlotIndex]))
