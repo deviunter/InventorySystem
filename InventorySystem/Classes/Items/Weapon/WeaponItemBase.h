@@ -24,6 +24,9 @@ public:
 
 	virtual void OnItemUsed_Implementation() override;
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	TSubclassOf<AWeaponBase> GetWeaponClass() const;
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon Item Base")

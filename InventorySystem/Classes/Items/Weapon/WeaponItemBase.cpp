@@ -46,3 +46,8 @@ void UWeaponItemBase::OnItemUsed_Implementation()
 		Player->EquipWeaponAtClass(WeaponClass);
 	}
 }
+
+TSubclassOf<AWeaponBase> UWeaponItemBase::GetWeaponClass() const
+{
+	return WeaponClass;
+}

@@ -43,6 +43,6 @@ struct FCraftingRecipe : public FTableRowBase
 	int32 ReceivedAmmound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 RequiredWorkbenchLevel;
+	FName KeyDataRecipeID;
 
 };
