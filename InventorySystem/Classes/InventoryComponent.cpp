@@ -7,7 +7,6 @@
 // Unauthorized copying, modification, distribution, or use is strictly prohibited.
 
 #include "Systems/InventorySystem/Classes/InventoryComponent.h"
-#include "UObject/ConstructorHelpers.h"
 #include "Core/Interfaces/WidgetsInterface.h"
 
 UInventoryComponent::UInventoryComponent()
@@ -19,8 +18,6 @@ UInventoryComponent::UInventoryComponent()
 
 	TileSize = 90.0f;
 	InventoryType = EInventoryType::DefaultInventory;
-
-	GetWidgetClass();
 }
 
 void UInventoryComponent::BeginPlay()
@@ -242,34 +239,22 @@ bool UInventoryComponent::DropItem(UItemBase* ItemToRemove, int32 Ammound, bool 
 }
 
 // This function don't needed in ABYSSWHISPER but i do this later for reflection engine inventory in other repo
-bool UInventoryComponent::SplitItem(int32 TopLeftIndex, int32 NewItemAmmound)
+bool UInventoryComponent::SplitItem(UItemBase* ItemToSplit, int32 NewItemAmmound)
 {
-	if (!IsValid(ItemSlots[TopLeftIndex]))
+	if (!IsValid(ItemToSplit))
 	{
 		return false;
 	}
-	if (ItemSlots[TopLeftIndex]->GetItemSignature().bIsStackble && ItemSlots[TopLeftIndex]->GetCurrentAmmound() > 1)
+	if (ItemToSplit->GetItemSignature().bIsStackble && ItemToSplit->GetCurrentAmmound() > 1)
 	{
 		// DUBLICATE CLASS
-		TSubclassOf<UItemBase> LocalClass = ItemSlots[TopLeftIndex]->GetClass();
-		int32 NewAmmoundToOldItem = ItemSlots[TopLeftIndex]->GetCurrentAmmound() - NewItemAmmound;
-		ItemSlots[TopLeftIndex]->SetCurrentAmmound(NewAmmoundToOldItem);
+		TSubclassOf<UItemBase> LocalClass = ItemToSplit->GetClass();
+		int32 NewAmmoundToOldItem = ItemToSplit->GetCurrentAmmound() - NewItemAmmound;
+		ItemToSplit->SetCurrentAmmound(NewAmmoundToOldItem);
 		UItemBase* LocalNewItem = NewObject<UItemBase>(this, LocalClass.Get());
+		LocalNewItem->SetCurrentAmmound(NewItemAmmound);
 		// ADD NEW ITEM TO INVENTORY
-		for (int32 i = 0; i < ItemSlots.Num(); i++)
-		{
-			if (IsTileValid(IndexToTile(i)))
-			{
-				if (IsRoomAvailable(LocalNewItem, i))
-				{
-					AddNewItem(LocalNewItem, i);
-				}
-				else
-				{
-					break;
-				}
-			}
-		}
+		AddItem(LocalNewItem);
 	}
 	return true;
 }
@@ -523,7 +508,9 @@ void UInventoryComponent::UpdateInventorySize()
 
 void UInventoryComponent::CreateGridWidget()
 {
-	InventoryGrid = CreateWidget<UUserWidget>(GetWorld(), InventoryGridClass);
+	UClass* LoadedClass = InventoryGridClass.LoadSynchronous();
+	if (!LoadedClass) return;
+	InventoryGrid = CreateWidget<UUserWidget>(GetWorld(), LoadedClass);
 	IWidgetsInterface::Execute_SetOwnerInventoryReference((UObject*)InventoryGrid, this);
 	UpdateGridWidget();
 }
@@ -533,16 +520,6 @@ void UInventoryComponent::UpdateGridWidget()
 	if (IsValid(InventoryGrid))
 	{
 		IWidgetsInterface::Execute_UpdateInventoryGrid((UObject*)InventoryGrid);
-	}
-}
-
-void UInventoryComponent::GetWidgetClass()
-{
-	static ConstructorHelpers::FClassFinder<UUserWidget> InventoryGridWidget(TEXT("/Game/SD/Systems/InventorySystem/UI/InventoryGrid"));
-	if (InventoryGridWidget.Class != nullptr)
-	{
-		InventoryGridClass = InventoryGridWidget.Class;
-		return;
 	}
 }
 

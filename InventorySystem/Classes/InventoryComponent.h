@@ -48,6 +48,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Design")
 	FText InventoryName;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSoftClassPtr<UUserWidget> InventoryGridClass;
+
 public:	
 	
 	// BLUEPRINT VISIBLE FUNCTIONS
@@ -67,7 +70,7 @@ public:
 
 	// Splits a stack of items into two separate stacks.
 	UFUNCTION(BlueprintCallable, Category = "Manage")
-	bool SplitItem(int32 TopLeftIndex, int32 NewItemAmmound);
+	bool SplitItem(UItemBase* ItemToSplit, int32 NewItemAmmound);
 
 	// Uses an item (triggers its functionality).
 	UFUNCTION(BlueprintCallable, Category = "Manage")
@@ -198,12 +201,6 @@ private:
 
 	UFUNCTION()
 	void UpdateGridWidget();
-
-	UFUNCTION()
-	void GetWidgetClass();
-
-	UPROPERTY()
-	TSubclassOf<class UUserWidget> InventoryGridClass;
 
 	UPROPERTY()
 	TObjectPtr<UUserWidget> InventoryGrid;
