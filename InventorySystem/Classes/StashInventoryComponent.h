@@ -27,5 +27,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Stash Optimization")
 	void OnPlayerIsNear();
+
+protected:
+
+	virtual void BeginPlay() override;
 	
 };

@@ -8,12 +8,20 @@
 
 #include "Systems/InventorySystem/Classes/StashInventoryComponent.h"
 #include "Systems/InventorySystem/Structures/LootDropList.h"
+#include "Core/Interfaces/ActorsInterface.h"
 
 UStashInventoryComponent::UStashInventoryComponent()
 {
 	InventoryType = EInventoryType::LootboxInventory;
 	RowSize = 6;
 	ColumnSize = 10;
+}
+
+void UStashInventoryComponent::BeginPlay()
+{
+	Super::BeginPlay();
+	if (!GetOwner()->GetClass()->ImplementsInterface(UActorsInterface::StaticClass())) return;
+	InventoryName = IActorsInterface::Execute_GetActorName((UObject*)GetOwner());
 }
 
 void UStashInventoryComponent::OnPlayerIsNear()
