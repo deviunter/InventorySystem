@@ -28,6 +28,8 @@ Developed in Unreal Engine 5. "Unreal Engine" and its logo are trademarks or reg
 
 # ОПИСАНИЕ ОБНОВЛЕНИЙ
 
+`v. 1.0.3` - Правка багов.
+
 `v. 1.0.2` - Stash Inventory теперь подтягивает имя овнера через интерфейс - косметика для UI и игрока.
 
 `v. 1.0.1` - Исправлена кодировка
