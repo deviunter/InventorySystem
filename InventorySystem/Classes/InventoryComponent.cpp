@@ -123,6 +123,7 @@ int32 UInventoryComponent::AddItemToStackWithReminder(UItemBase* ItemToAdd, int3
 		for (int32 y = IndexToTile(TopLeftIndex).Y; y < ItemToAdd->GetItemDimension().Y + IndexToTile(TopLeftIndex).Y; y++)
 		{
 			TiledIndex = TileToIndex(FItemTile(x, y));
+			if (!IsValid(ItemSlots[TiledIndex])) continue;
 			int32 CurrentAmmound = ItemSlots[TiledIndex]->GetCurrentAmmound();
 			if (IsValid(ItemToAdd) && ItemToAdd->GetItemSignature().ItemID == ItemSlots[TiledIndex]->GetItemSignature().ItemID)
 			{
@@ -204,13 +205,19 @@ bool UInventoryComponent::RemoveItem(UItemBase* ItemToRemove, int32 AmmoundToRem
 			UItemBase* RemainderItem = nullptr;
 			for (UItemBase* LocalItem : ItemSlots)
 			{
+				if (!IsValid(LocalItem)) continue;
 				if (LocalItem->GetClass() == ItemToRemove->GetClass())
 				{
-					RemoveItem(RemainderItem, Remainder, DestroyItem);
-					if (OnItemRemoved.IsBound()) OnItemRemoved.Broadcast(ItemID, DestroyItem);
-					UpdateGridWidget();
-					return true;
+					RemainderItem = LocalItem;
+					break;
 				}
+			}
+			if (IsValid(RemainderItem))
+			{
+				RemoveItem(RemainderItem, Remainder, DestroyItem);
+				if (OnItemRemoved.IsBound()) OnItemRemoved.Broadcast(ItemID, DestroyItem);
+				UpdateGridWidget();
+				return true;
 			}
 		}
 	}

@@ -141,6 +141,7 @@ bool UPlayerInventoryComponent::SetKeyDataIsUsed(FName KeyDataID, bool NewIsUsed
 	{
 		if (KeyDataList[i].KeyDataID == KeyDataID)
 		{
+			IHeadUpInterface::Execute_KeyDataItemUsed((UObject*)PlayerDisplay, KeyDataList[i]);
 			KeyDataList[i].bIsUsed = NewIsUsed;
 			return true;
 		}
@@ -154,6 +155,7 @@ bool UPlayerInventoryComponent::RemoveKeyDataAtID(FName KeyDataID)
 	{
 		if (KeyDataList[i].KeyDataID == KeyDataID)
 		{
+			IHeadUpInterface::Execute_KeyDataItemRemoved((UObject*)PlayerDisplay, KeyDataList[i]);
 			KeyDataList.RemoveAt(i);
 			return true;
 		}
@@ -286,6 +288,7 @@ int32 UPlayerInventoryComponent::CheckEqualsWithQuickAccess(UItemBase* ItemToChe
 {
 	for (int32 i = 0; i < QuickAccessSlots.Num(); i++)
 	{
+		if (!IsValid(QuickAccessSlots[i])) continue;
 		if (ItemToCheck->GetClass() == QuickAccessSlots[i]->GetClass())
 		{
 			return i;
@@ -301,6 +304,7 @@ bool UPlayerInventoryComponent::SetQuickAccessSlot(UItemBase* ItemToAdd, int32 I
 	if (ItemToAdd->GetClass() == QuickAccessSlots[Index]->GetClass()) return false;
 	for (int32 i = 0; i < QuickAccessSlots.Num(); i++)
 	{
+		if (!IsValid(QuickAccessSlots[i])) continue;
 		if (ItemToAdd->GetClass() == QuickAccessSlots[i]->GetClass())
 		{
 			QuickAccessSlots[i] = nullptr;
