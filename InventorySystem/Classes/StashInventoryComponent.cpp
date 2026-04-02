@@ -36,3 +36,8 @@ void UStashInventoryComponent::OnPlayerIsNear()
 	}
 	LootInfo = nullptr;
 }
+
+bool UStashInventoryComponent::IsStashInspected() const
+{
+	return !IsValid(LootInfo);
+}

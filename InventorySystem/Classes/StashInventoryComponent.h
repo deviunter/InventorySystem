@@ -25,8 +25,11 @@ public:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<ULootDataAsset> LootInfo;
 
-	UFUNCTION(BlueprintCallable, Category = "Stash Optimization")
+	UFUNCTION(BlueprintCallable)
 	void OnPlayerIsNear();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool IsStashInspected() const;
 
 protected:
 
