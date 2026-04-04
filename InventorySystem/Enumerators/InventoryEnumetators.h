@@ -15,6 +15,7 @@ enum class EItemType : uint8
 {
 	Weapon UMETA(DisplayName = "Weapon"),
 	Ammunition UMETA(DisplayName = "Ammunition"),
+	Attachment UMETA(DisplayName = "Attachment"),
 	Battery UMETA(DisplayName = "Battery"),
 	Health UMETA(DisplayName = "Health"),
 	Throwable UMETA(DisplayName = "Throwable Weapon"),
