@@ -28,6 +28,10 @@ Developed in Unreal Engine 5. "Unreal Engine" and its logo are trademarks or reg
 
 # ОПИСАНИЕ ОБНОВЛЕНИЙ
 
+`v. 1.0.7` - Структуры сохранений перенесены в один файл - InventorySave.h
+
+`v. 1.0.6` - Исправления багов Save/Load логики
+
 `v. 1.0.5` - Была реализована простая прокачка оружия и добавлен UAttachmentItemBase - базовый класс для всех обвесов на оружие.
 
 `v. 1.0.4` - Небольшие изменения в UStashInventoryComponent
