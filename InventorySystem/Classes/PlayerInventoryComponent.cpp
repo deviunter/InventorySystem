@@ -340,29 +340,29 @@ FPlayerInventorySaveSignature UPlayerInventoryComponent::GetPlayerInventorySaveD
 			QuickAccessInfo.Add(LocalQAItem);
 		}
 	}
-	LocalSave.ItemSlotsInfo = GetInventorySaveData();
-	LocalSave.Resources = ResourceList;
+	LocalSave.InventoryInfo = GetInventorySaveData();
+	LocalSave.ResourcesInfo = ResourceList;
 	LocalSave.KeyDataItemsInfo = KeyDataList;
-	LocalSave.CharmInventorySlots = CharmInfo;
-	LocalSave.QuickAccessSlots = QuickAccessInfo;
+	LocalSave.CharmInventorySlotsInfo = CharmInfo;
+	LocalSave.QuickAccessSlotsInfo = QuickAccessInfo;
 	return LocalSave;
 }
 
 void UPlayerInventoryComponent::SetPlayerInventoryLoadData(FPlayerInventorySaveSignature InventorySaveData)
 {
-	SetInventoryLoadData(InventorySaveData.ItemSlotsInfo);
-	ResourceList = InventorySaveData.Resources;
+	SetInventoryLoadData(InventorySaveData.InventoryInfo);
+	ResourceList = InventorySaveData.ResourcesInfo;
 	KeyDataList = InventorySaveData.KeyDataItemsInfo;
-	for (int32 i = 0; i < InventorySaveData.QuickAccessSlots.Num(); i++)
+	for (int32 i = 0; i < InventorySaveData.QuickAccessSlotsInfo.Num(); i++)
 	{
-		if (IsValid(GetItemAtClass(InventorySaveData.QuickAccessSlots[i].ItemClass)))
+		if (IsValid(GetItemAtClass(InventorySaveData.QuickAccessSlotsInfo[i].ItemClass)))
 		{
-			SetQuickAccessSlot(GetItemAtClass(InventorySaveData.QuickAccessSlots[i].ItemClass), i);
+			SetQuickAccessSlot(GetItemAtClass(InventorySaveData.QuickAccessSlotsInfo[i].ItemClass), i);
 		}
 	}
-	for (int32 i = 0; i < InventorySaveData.CharmInventorySlots.Num(); i++)
+	for (int32 i = 0; i < InventorySaveData.CharmInventorySlotsInfo.Num(); i++)
 	{
-		UItemBase* LocalCharm = NewObject<UItemBase>(this, InventorySaveData.CharmInventorySlots[i].ItemClass);
+		UItemBase* LocalCharm = NewObject<UItemBase>(this, InventorySaveData.CharmInventorySlotsInfo[i].ItemClass);
 		AddCharmItemToSlot(LocalCharm, i);
 	}
 }
@@ -370,6 +370,7 @@ void UPlayerInventoryComponent::SetPlayerInventoryLoadData(FPlayerInventorySaveS
 void UPlayerInventoryComponent::AddItemNotification(UItemBase* AddedItem, EInventoryAddingType ItemState)
 {
 	Super::AddItemNotification(AddedItem, ItemState);
+	if (!PlayerDisplay) return;
 	if (ItemState == EInventoryAddingType::NotAdded)
 	{
 		IHeadUpInterface::Execute_InventoryOverloaded((UObject*)PlayerDisplay);
@@ -382,11 +383,13 @@ void UPlayerInventoryComponent::AddItemNotification(UItemBase* AddedItem, EInven
 
 void UPlayerInventoryComponent::ResourceNotification(EResourceType Resource, int32 AddedAmount)
 {
+	if (!PlayerDisplay) return;
 	IHeadUpInterface::Execute_ResourceAdded((UObject*)PlayerDisplay, Resource, AddedAmount);
 }
 
 void UPlayerInventoryComponent::KeyDataNotification(FKeyDataSignature KeyData)
 {
+	if (!PlayerDisplay) return;
 	IHeadUpInterface::Execute_KeyDataItemAdded((UObject*)PlayerDisplay, KeyData);
 }
 

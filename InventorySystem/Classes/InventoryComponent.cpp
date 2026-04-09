@@ -535,7 +535,7 @@ UUserWidget* UInventoryComponent::GetGridWidget() const
 	return InventoryGrid;
 }
 
-TArray<FItemSaveInfo> UInventoryComponent::GetInventorySaveData()
+FInventorySave UInventoryComponent::GetInventorySaveData() const
 {
 	TArray<UItemBase*> ClearedItems;
 	TArray<FItemSaveInfo> ItemsInfo;
@@ -551,12 +551,19 @@ TArray<FItemSaveInfo> UInventoryComponent::GetInventorySaveData()
 		ForedItem.ItemTile = IndexToTile(i);
 		ItemsInfo.Add(ForedItem);
 	}
-	return ItemsInfo;
+	FInventorySave LocalSaveInfo;
+	LocalSaveInfo.ItemSaveInfo = ItemsInfo;
+	LocalSaveInfo.ColumnSize = ColumnSize;
+	LocalSaveInfo.RowSize = RowSize;
+	return LocalSaveInfo;
 }
 
-void UInventoryComponent::SetInventoryLoadData(TArray<FItemSaveInfo> InventoryInfo)
+void UInventoryComponent::SetInventoryLoadData(FInventorySave InventoryInfo)
 {
-	for (FItemSaveInfo LocalItem : InventoryInfo)
+	RowSize = InventoryInfo.RowSize;
+	ColumnSize = InventoryInfo.ColumnSize;
+	UpdateInventorySize();
+	for (FItemSaveInfo LocalItem : InventoryInfo.ItemSaveInfo)
 	{
 		UItemBase* CreatedItem = NewObject<UItemBase>(this, LocalItem.ItemClass);
 		CreatedItem->SetCurrentAmmound(LocalItem.ItemAmmound);

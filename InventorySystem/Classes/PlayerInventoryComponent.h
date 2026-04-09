@@ -12,7 +12,6 @@
 #include "Systems/InventorySystem/Classes/InventoryComponent.h"
 #include "Systems/InventorySystem/Structures/ResourceSignature.h"
 #include "Systems/InventorySystem/Enumerators/InventoryEnumetators.h"
-#include "Systems/InventorySystem/Structures/PlayerInventorySaveSignature.h"
 #include "Systems/InventorySystem/Structures/KeyDataSignature.h"
 #include "PlayerInventoryComponent.generated.h"
 

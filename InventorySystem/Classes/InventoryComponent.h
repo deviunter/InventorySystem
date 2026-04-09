@@ -20,7 +20,7 @@
 #include "Systems/InventorySystem/Enumerators/InventoryEnumetators.h"
 #include "Systems/InventorySystem/Classes/ItemBase.h"
 #include "Blueprint/UserWidget.h"
-#include "Systems/InventorySystem/Structures/ItemSaveInfo.h"
+#include "Systems/InventorySystem/Structures/InventorySave.h"
 #include "InventoryComponent.generated.h"
 
 
@@ -143,10 +143,10 @@ public:
 	UUserWidget* GetGridWidget() const;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory Save")
-	TArray<FItemSaveInfo> GetInventorySaveData();
+	FInventorySave GetInventorySaveData() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory Save")
-	void SetInventoryLoadData(TArray<FItemSaveInfo> InventoryInfo);
+	void SetInventoryLoadData(FInventorySave InventoryInfo);
 
 	// Number of columns in the inventory grid.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Size")
