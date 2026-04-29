@@ -28,6 +28,8 @@ Developed in Unreal Engine 5. "Unreal Engine" and its logo are trademarks or reg
 
 # ОПИСАНИЕ ОБНОВЛЕНИЙ
 
+`v. 1.0.8` - Добавлен класс UGeneratedLootDataAsset - child от ULootDataAsset, который генерирует лут сам, по выбранным параметрам: тип предмета и "редкость" - условный параметр, который игрок не увидит.
+
 `v. 1.0.7` - Структуры сохранений перенесены в один файл - InventorySave.h
 
 `v. 1.0.6` - Исправления багов Save/Load логики
