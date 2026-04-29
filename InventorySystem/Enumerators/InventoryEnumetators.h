@@ -81,3 +81,21 @@ enum class ESpawnLootType : uint8
 	ExclusiveLoot,
 	DebugLoot
 };
+
+UENUM(BlueprintType)
+enum class EItemRarity : uint8
+{
+	Common,
+	Uncommon,
+	Rare,
+	VeryRare,
+	Legend
+};
+
+UENUM(BlueprintType)
+enum class ELootGenerateRules : uint8
+{
+	ByItemType,
+	ByRarity,
+	Shuffle
+};

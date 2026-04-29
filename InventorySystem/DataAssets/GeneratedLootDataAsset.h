@@ -9,25 +9,38 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine/DataAsset.h"
-#include "Systems/InventorySystem/Structures/LootDropList.h"
-#include "LootDataAsset.generated.h"
+#include "Systems/InventorySystem/DataAssets/LootDataAsset.h"
+#include "Systems/InventorySystem/Enumerators/InventoryEnumetators.h"
+#include "Engine/DataTable.h"
+#include "GeneratedLootDataAsset.generated.h"
 
 UCLASS()
-class ABYSSWHISPER_API ULootDataAsset : public UDataAsset
+class ABYSSWHISPER_API UGeneratedLootDataAsset : public ULootDataAsset
 {
 	GENERATED_BODY()
 
-protected:
-
-	virtual TArray<FLootDropList> GetOptions();
-
-	UPROPERTY(EditDefaultsOnly)
-	TArray<FLootDropList> LootDropList;
-
 public:
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	TArray<FLootDropList> GetLootDropList();
-	
+	UGeneratedLootDataAsset();	
+
+protected:
+
+	virtual TArray<FLootDropList> GetOptions() override;
+
+	UPROPERTY(EditDefaultsOnly)
+	int32 MaxItemsLength;
+
+	UPROPERTY(EditDefaultsOnly)
+	ELootGenerateRules GenerateRules;
+
+	UPROPERTY(EditDefaultsOnly)
+	TArray<EItemType> LootTypes;
+
+	UPROPERTY(EditDefaultsOnly)
+	TArray<EItemRarity> LootRarities;
+
+private:
+
+	UPROPERTY()
+	TObjectPtr<UDataTable> LootItemsTable;
 };

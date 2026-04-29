@@ -10,5 +10,10 @@
 
 TArray<FLootDropList> ULootDataAsset::GetLootDropList()
 {
+	return GetOptions();
+}
+
+TArray<FLootDropList> ULootDataAsset::GetOptions()
+{
 	return LootDropList;
 }

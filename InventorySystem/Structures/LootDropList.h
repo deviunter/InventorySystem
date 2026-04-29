@@ -10,6 +10,7 @@
 
 #include "CoreMinimal.h"
 #include "Systems/InventorySystem/Classes/ItemBase.h"
+#include "Systems/InventorySystem/Enumerators/InventoryEnumetators.h"
 #include "LootDropList.generated.h"
 
 USTRUCT(BlueprintType)
@@ -28,5 +29,26 @@ struct FLootDropList
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 AmmoundMax;
+};
+
+USTRUCT(BlueprintType)
+struct FLootItemInfo : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UItemBase> ItemClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EItemType ItemType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EItemRarity ItemRarity;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MaxStackSize;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsItemStackable;
 };
 
