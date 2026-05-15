@@ -37,7 +37,7 @@ UPlayerInventoryComponent::UPlayerInventoryComponent()
 	RefreshCharmInventory();
 
 	// QUICK ACCESS SLOTS SETUP
-	QuickAccessSlots.SetNum(12);
+	QuickAccessSlots.SetNum(8);
 
 	// CLASS SETUP
 	InventoryType = EInventoryType::PlayerInventory;
@@ -297,20 +297,37 @@ int32 UPlayerInventoryComponent::CheckEqualsWithQuickAccess(UItemBase* ItemToChe
 	return INDEX_NONE;
 }
 
+void UPlayerInventoryComponent::TrySetAtQuickAccess(UItemBase* ItemToAdd)
+{
+	if (!ItemToAdd->GetItemSignature().bAllowQuickAccess) return;
+	TArray<int32> WeaponSlots = { 0, 1, 4, 7 };
+	TArray<int32> BatterySlots = { 5, 6 };
+	TArray<int32> HealthSlots = { 2, 3 };
+	switch (ItemToAdd->GetItemSignature().ItemType)
+	{
+	case EItemType::Weapon:
+		for (int32 i : WeaponSlots)
+		{
+			if (SetQuickAccessSlot(ItemToAdd, i)) return;
+		}
+	case EItemType::Battery:
+		for (int32 i : BatterySlots)
+		{
+			if (SetQuickAccessSlot(ItemToAdd, i)) return;
+		}
+	case EItemType::Health:
+		for (int32 i : HealthSlots)
+		{
+			if (SetQuickAccessSlot(ItemToAdd, i)) return;
+		}
+	}
+}
+
 bool UPlayerInventoryComponent::SetQuickAccessSlot(UItemBase* ItemToAdd, int32 Index)
 {
 	if (!IsValid(ItemToAdd)) return false;
 	if (!QuickAccessSlots.IsValidIndex(Index)) return false;
-	if (ItemToAdd->GetClass() == QuickAccessSlots[Index]->GetClass()) return false;
-	for (int32 i = 0; i < QuickAccessSlots.Num(); i++)
-	{
-		if (!IsValid(QuickAccessSlots[i])) continue;
-		if (ItemToAdd->GetClass() == QuickAccessSlots[i]->GetClass())
-		{
-			QuickAccessSlots[i] = nullptr;
-			break;
-		}
-	}
+	if (IsValid(QuickAccessSlots[Index])) return false;
 	QuickAccessSlots[Index] = ItemToAdd;
 	return true;
 }
@@ -370,6 +387,7 @@ void UPlayerInventoryComponent::SetPlayerInventoryLoadData(FPlayerInventorySaveS
 void UPlayerInventoryComponent::AddItemNotification(UItemBase* AddedItem, EInventoryAddingType ItemState)
 {
 	Super::AddItemNotification(AddedItem, ItemState);
+	TrySetAtQuickAccess(AddedItem);
 	if (!PlayerDisplay) return;
 	if (ItemState == EInventoryAddingType::NotAdded)
 	{

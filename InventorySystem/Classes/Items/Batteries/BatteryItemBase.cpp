@@ -13,6 +13,7 @@
 UBatteryItemBase::UBatteryItemBase()
 {
 	// TYPE PRESET
+	ItemSignature.bAllowQuickAccess = true;
 	ItemSignature.bIsStackble = true;
 	ItemSignature.bIsUsable = true;
 	ItemSignature.MaxStackSize = 5;

@@ -98,6 +98,9 @@ public:
 	int32 CheckEqualsWithQuickAccess(UItemBase* ItemToCheck);
 
 	UFUNCTION(BlueprintCallable, Category = "Quick Access")
+	void TrySetAtQuickAccess(UItemBase* ItemToAdd);
+
+	UFUNCTION(BlueprintCallable, Category = "Quick Access")
 	bool SetQuickAccessSlot(UItemBase* ItemToAdd, int32 Index);
 
 	// RESOURCE INVENTORY PARAMETERS
