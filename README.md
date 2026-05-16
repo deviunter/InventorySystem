@@ -22,9 +22,7 @@ Developed in Unreal Engine 5. "Unreal Engine" and its logo are trademarks or reg
 с другими системами и то, как это работало на атмосферу там, мне было референсом.
 
 # ПЛАНЫ НА БУДУЩЕЕ
-1. Доработать базовый функционал UInventoryComponent и других основных классов Inventory System и подготовить её для адаптации и интеграции её в Reflection Engine.
-2. Правка багов, если они мне попадутся
-3. Сделать мультиплеерный форк в Reflection Engine.
+1. Все текущие задачи для проекта ABYSSWHISPER реализованы
 
 # ОПИСАНИЕ ОБНОВЛЕНИЙ
 
