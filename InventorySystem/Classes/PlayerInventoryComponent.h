@@ -89,19 +89,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Charms")
 	void RefreshCharmInventory();
 
-	// QUICK ACCESS SLOTS
+	// RADIAL MENU SLOTS
 
-	UFUNCTION(BlueprintCallable, Category = "Quick Access")
-	UItemBase* GetQuickAccessSlotAtIndex(int32 SlotIndex);
-
-	UFUNCTION(BlueprintCallable, Category = "Quick Access")
-	int32 CheckEqualsWithQuickAccess(UItemBase* ItemToCheck);
-
-	UFUNCTION(BlueprintCallable, Category = "Quick Access")
-	void TrySetAtQuickAccess(UItemBase* ItemToAdd);
-
-	UFUNCTION(BlueprintCallable, Category = "Quick Access")
-	bool SetQuickAccessSlot(UItemBase* ItemToAdd, int32 Index);
+	UFUNCTION(BlueprintCallable, Category = "Radial Menu")
+	TArray<TSubclassOf<UItemBase>> GetRadialMenuItems() const;
 
 	// RESOURCE INVENTORY PARAMETERS
 
@@ -137,7 +128,19 @@ protected:
 
 	virtual void AddItemNotification(UItemBase* AddedItem, EInventoryAddingType ItemState) override;
 
+	virtual void OnItemWillRemoved(TSubclassOf<UItemBase> RemovedItemClass) override;
+
 private:
+
+	// RADIAL MENU
+
+	UFUNCTION()
+	void TryAddItemToRadialMenu(UItemBase* ItemToAdd);
+
+	UFUNCTION()
+	void RemoveItemFromRadialMenu(TSubclassOf<UItemBase> ClassToRemove);
+
+	// NOTIFICATIONS
 
 	UFUNCTION()
 	void ResourceNotification(EResourceType Resource, int32 AddedAmount);
@@ -161,5 +164,8 @@ private:
 	TArray<UItemBase*> CharmsList;
 
 	UPROPERTY()
-	TArray<UItemBase*> QuickAccessSlots;
+	TArray<TSubclassOf<UItemBase>> RadialMenuItems;
+
+	UPROPERTY()
+	TArray<TSubclassOf<UItemBase>> RadialMenuPendingItems;
 };

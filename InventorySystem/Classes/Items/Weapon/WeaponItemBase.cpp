@@ -40,15 +40,8 @@ void UWeaponItemBase::RemoveImmersiveItem_Implementation()
 void UWeaponItemBase::OnItemUsed_Implementation()
 {
 	TObjectPtr<AExtendedPlayerCharacter> Player = Cast<AExtendedPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (Player->CurrentWeapon)
-	{
-		if (Player->CurrentWeapon->GetChildActorClass() == WeaponClass) return;
-		Player->UnequipWeapon();
-	}
-	else
-	{
-		Player->EquipWeaponAtClass(WeaponClass);
-	}
+	if (Player->CurrentWeapon && Player->CurrentWeapon->GetChildActorClass() == WeaponClass) return;
+	Player->EquipWeaponAtClass(WeaponClass, false);
 }
 
 TSubclassOf<AWeaponBase> UWeaponItemBase::GetWeaponClass() const

@@ -40,6 +40,8 @@ protected:
 	// Internal notification when an item is added. Can be overridden in child classes.
 	virtual void AddItemNotification(UItemBase* AddedItem, EInventoryAddingType ItemState);
 
+	virtual void OnItemWillRemoved(TSubclassOf<UItemBase> RemovedItemClass);
+
 	// Type of inventory (affects behavior and UI).
 	UPROPERTY()
 	EInventoryType InventoryType;

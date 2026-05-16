@@ -186,6 +186,7 @@ bool UInventoryComponent::RemoveItem(UItemBase* ItemToRemove, int32 AmmoundToRem
 					ItemSlots[i] = nullptr;
 				}
 			}
+			OnItemWillRemoved(ItemToRemove->GetClass());
 			if (DestroyItem) ItemToRemove->MarkAsGarbage();
 			if (OnItemRemoved.IsBound()) OnItemRemoved.Broadcast(ItemID, DestroyItem);
 			UpdateGridWidget();
@@ -215,6 +216,7 @@ bool UInventoryComponent::RemoveItem(UItemBase* ItemToRemove, int32 AmmoundToRem
 			if (IsValid(RemainderItem))
 			{
 				RemoveItem(RemainderItem, Remainder, DestroyItem);
+				OnItemWillRemoved(ItemToRemove->GetClass());
 				if (OnItemRemoved.IsBound()) OnItemRemoved.Broadcast(ItemID, DestroyItem);
 				UpdateGridWidget();
 				return true;
@@ -333,6 +335,10 @@ void UInventoryComponent::AddItemAtClass(TSubclassOf<UItemBase> ItemClassToAdd, 
 void UInventoryComponent::AddItemNotification(UItemBase* AddedItem, EInventoryAddingType ItemState)
 {
 	UpdateGridWidget();
+}
+
+void UInventoryComponent::OnItemWillRemoved(TSubclassOf<UItemBase> RemovedItemClass)
+{
 }
 
 bool UInventoryComponent::IsTileValid(FItemTile Tile)

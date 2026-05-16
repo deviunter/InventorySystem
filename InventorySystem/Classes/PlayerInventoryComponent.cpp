@@ -37,7 +37,7 @@ UPlayerInventoryComponent::UPlayerInventoryComponent()
 	RefreshCharmInventory();
 
 	// QUICK ACCESS SLOTS SETUP
-	QuickAccessSlots.SetNum(8);
+	RadialMenuItems.SetNum(8);
 
 	// CLASS SETUP
 	InventoryType = EInventoryType::PlayerInventory;
@@ -277,66 +277,15 @@ void UPlayerInventoryComponent::RefreshCharmInventory()
 	CharmsList.SetNum(CharmInventoryLength);
 }
 
-UItemBase* UPlayerInventoryComponent::GetQuickAccessSlotAtIndex(int32 SlotIndex)
+TArray<TSubclassOf<UItemBase>> UPlayerInventoryComponent::GetRadialMenuItems() const
 {
-	if (!QuickAccessSlots.IsValidIndex(SlotIndex)) return nullptr;
-	if (IsValid(QuickAccessSlots[SlotIndex])) return QuickAccessSlots[SlotIndex];
-	return nullptr;
-}
-
-int32 UPlayerInventoryComponent::CheckEqualsWithQuickAccess(UItemBase* ItemToCheck)
-{
-	for (int32 i = 0; i < QuickAccessSlots.Num(); i++)
-	{
-		if (!IsValid(QuickAccessSlots[i])) continue;
-		if (ItemToCheck->GetClass() == QuickAccessSlots[i]->GetClass())
-		{
-			return i;
-		}
-	}
-	return INDEX_NONE;
-}
-
-void UPlayerInventoryComponent::TrySetAtQuickAccess(UItemBase* ItemToAdd)
-{
-	if (!ItemToAdd->GetItemSignature().bAllowQuickAccess) return;
-	TArray<int32> WeaponSlots = { 0, 1, 4, 7 };
-	TArray<int32> BatterySlots = { 5, 6 };
-	TArray<int32> HealthSlots = { 2, 3 };
-	switch (ItemToAdd->GetItemSignature().ItemType)
-	{
-	case EItemType::Weapon:
-		for (int32 i : WeaponSlots)
-		{
-			if (SetQuickAccessSlot(ItemToAdd, i)) return;
-		}
-	case EItemType::Battery:
-		for (int32 i : BatterySlots)
-		{
-			if (SetQuickAccessSlot(ItemToAdd, i)) return;
-		}
-	case EItemType::Health:
-		for (int32 i : HealthSlots)
-		{
-			if (SetQuickAccessSlot(ItemToAdd, i)) return;
-		}
-	}
-}
-
-bool UPlayerInventoryComponent::SetQuickAccessSlot(UItemBase* ItemToAdd, int32 Index)
-{
-	if (!IsValid(ItemToAdd)) return false;
-	if (!QuickAccessSlots.IsValidIndex(Index)) return false;
-	if (IsValid(QuickAccessSlots[Index])) return false;
-	QuickAccessSlots[Index] = ItemToAdd;
-	return true;
+	return RadialMenuItems;
 }
 
 FPlayerInventorySaveSignature UPlayerInventoryComponent::GetPlayerInventorySaveData()
 {
 	FPlayerInventorySaveSignature LocalSave;
 	TArray<FSupportInventoryInfo> CharmInfo;
-	TArray<FSupportInventoryInfo> QuickAccessInfo;
 	for (int32 i = 0; i < CharmsList.Num(); i++)
 	{
 		if (IsValid(CharmsList[i]))
@@ -347,21 +296,10 @@ FPlayerInventorySaveSignature UPlayerInventoryComponent::GetPlayerInventorySaveD
 			CharmInfo.Add(LocalItem);
 		}
 	}
-	for (int32 i = 0; i < QuickAccessSlots.Num(); i++)
-	{
-		if (IsValid(QuickAccessSlots[i]))
-		{
-			FSupportInventoryInfo LocalQAItem;
-			LocalQAItem.ItemClass = QuickAccessSlots[i]->GetClass();
-			LocalQAItem.SupportInventoryIndex = i;
-			QuickAccessInfo.Add(LocalQAItem);
-		}
-	}
 	LocalSave.InventoryInfo = GetInventorySaveData();
 	LocalSave.ResourcesInfo = ResourceList;
 	LocalSave.KeyDataItemsInfo = KeyDataList;
 	LocalSave.CharmInventorySlotsInfo = CharmInfo;
-	LocalSave.QuickAccessSlotsInfo = QuickAccessInfo;
 	return LocalSave;
 }
 
@@ -370,13 +308,6 @@ void UPlayerInventoryComponent::SetPlayerInventoryLoadData(FPlayerInventorySaveS
 	SetInventoryLoadData(InventorySaveData.InventoryInfo);
 	ResourceList = InventorySaveData.ResourcesInfo;
 	KeyDataList = InventorySaveData.KeyDataItemsInfo;
-	for (int32 i = 0; i < InventorySaveData.QuickAccessSlotsInfo.Num(); i++)
-	{
-		if (IsValid(GetItemAtClass(InventorySaveData.QuickAccessSlotsInfo[i].ItemClass)))
-		{
-			SetQuickAccessSlot(GetItemAtClass(InventorySaveData.QuickAccessSlotsInfo[i].ItemClass), i);
-		}
-	}
 	for (int32 i = 0; i < InventorySaveData.CharmInventorySlotsInfo.Num(); i++)
 	{
 		UItemBase* LocalCharm = NewObject<UItemBase>(this, InventorySaveData.CharmInventorySlotsInfo[i].ItemClass);
@@ -387,7 +318,7 @@ void UPlayerInventoryComponent::SetPlayerInventoryLoadData(FPlayerInventorySaveS
 void UPlayerInventoryComponent::AddItemNotification(UItemBase* AddedItem, EInventoryAddingType ItemState)
 {
 	Super::AddItemNotification(AddedItem, ItemState);
-	TrySetAtQuickAccess(AddedItem);
+	TryAddItemToRadialMenu(AddedItem);
 	if (!PlayerDisplay) return;
 	if (ItemState == EInventoryAddingType::NotAdded)
 	{
@@ -397,6 +328,70 @@ void UPlayerInventoryComponent::AddItemNotification(UItemBase* AddedItem, EInven
 	{
 		IHeadUpInterface::Execute_ItemAdded((UObject*)PlayerDisplay, AddedItem->GetItemSignature());
 	}
+}
+
+void UPlayerInventoryComponent::OnItemWillRemoved(TSubclassOf<UItemBase> RemovedItemClass)
+{
+	RemoveItemFromRadialMenu(RemovedItemClass);
+}
+
+void UPlayerInventoryComponent::TryAddItemToRadialMenu(UItemBase* ItemToAdd)
+{
+	if (!IsValid(ItemToAdd)) return;
+	if (!ItemToAdd->GetItemSignature().bAllowQuickAccess) return;
+	TArray<int32> WeaponSlots = { 0, 1, 4, 7 };
+	TArray<int32> BatterySlots = { 5, 6 };
+	TArray<int32> HealthSlots = { 2, 3 };
+	bool bSuccessAdding = false;
+	switch (ItemToAdd->GetItemSignature().ItemType)
+	{
+	case EItemType::Weapon:
+		for (int32 i : WeaponSlots)
+		{
+			if (IsValid(RadialMenuItems[i])) continue;
+			RadialMenuItems[i] = ItemToAdd->GetClass();
+			bSuccessAdding = true;
+			break;
+		}
+		break;
+	case EItemType::Battery:
+		for (int32 i : BatterySlots)
+		{
+			if (IsValid(RadialMenuItems[i])) continue;
+			RadialMenuItems[i] = ItemToAdd->GetClass();
+			bSuccessAdding = true;
+			break;
+		}
+		break;
+	case EItemType::Health:
+		for (int32 i : HealthSlots)
+		{
+			if (IsValid(RadialMenuItems[i])) continue;
+			RadialMenuItems[i] = ItemToAdd->GetClass();
+			bSuccessAdding = true;
+			break;
+		}
+		break;
+	}
+	if (bSuccessAdding) return;
+	RadialMenuPendingItems.Add(ItemToAdd->GetClass());
+}
+
+void UPlayerInventoryComponent::RemoveItemFromRadialMenu(TSubclassOf<UItemBase> ClassToRemove)
+{
+	if (GetItemAmmound(ClassToRemove) > 0) return;
+
+	for (int32 i = 0; i < RadialMenuItems.Num(); i++)
+	{
+		if (RadialMenuItems[i] == ClassToRemove)
+		{
+			RadialMenuItems[i] = nullptr;
+			break;
+		}
+	}
+	if (RadialMenuPendingItems.IsEmpty()) return;
+	int32 SelectedIndex = FMath::RandRange(0, RadialMenuPendingItems.Num() - 1);
+	TryAddItemToRadialMenu(GetItemAtClass(RadialMenuPendingItems[SelectedIndex]));
 }
 
 void UPlayerInventoryComponent::ResourceNotification(EResourceType Resource, int32 AddedAmount)

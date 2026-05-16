@@ -75,8 +75,5 @@ struct FPlayerInventorySaveSignature
 	TArray<FKeyDataSignature> KeyDataItemsInfo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FSupportInventoryInfo> QuickAccessSlotsInfo;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FSupportInventoryInfo> CharmInventorySlotsInfo;
 };
