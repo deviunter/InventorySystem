@@ -339,6 +339,10 @@ void UPlayerInventoryComponent::TryAddItemToRadialMenu(UItemBase* ItemToAdd)
 {
 	if (!IsValid(ItemToAdd)) return;
 	if (!ItemToAdd->GetItemSignature().bAllowQuickAccess) return;
+	for (TSubclassOf<UItemBase> LocalItem : RadialMenuItems)
+	{
+		if (LocalItem == ItemToAdd->GetClass()) return;
+	}
 	TArray<int32> WeaponSlots = { 0, 1, 4, 7 };
 	TArray<int32> BatterySlots = { 5, 6 };
 	TArray<int32> HealthSlots = { 2, 3 };
