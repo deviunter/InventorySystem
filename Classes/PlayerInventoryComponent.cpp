@@ -262,19 +262,19 @@ int32 UPlayerInventoryComponent::GetCharmItemAtClass(TSubclassOf<UCharmItemBase>
 
 bool UPlayerInventoryComponent::IsCharmSlotEmpty(int32 SlotIndex) const
 {
-	if (IsValid(CharmsList[SlotIndex]))
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	if (IsValid(CharmsList[SlotIndex])) return false;
+	return true;
 }
 
 void UPlayerInventoryComponent::RefreshCharmInventory()
 {
 	CharmsList.SetNum(CharmInventoryLength);
+}
+
+void UPlayerInventoryComponent::SetCharmInventorySize(int32 NewSize)
+{
+	CharmInventoryLength = NewSize;
+	RefreshCharmInventory();
 }
 
 TArray<TSubclassOf<UItemBase>> UPlayerInventoryComponent::GetRadialMenuItems() const
@@ -300,6 +300,7 @@ FPlayerInventorySaveSignature UPlayerInventoryComponent::GetPlayerInventorySaveD
 	LocalSave.ResourcesInfo = ResourceList;
 	LocalSave.KeyDataItemsInfo = KeyDataList;
 	LocalSave.CharmInventorySlotsInfo = CharmInfo;
+	LocalSave.CharmInventorySize = CharmInventoryLength;
 	return LocalSave;
 }
 
@@ -308,6 +309,7 @@ void UPlayerInventoryComponent::SetPlayerInventoryLoadData(FPlayerInventorySaveS
 	SetInventoryLoadData(InventorySaveData.InventoryInfo);
 	ResourceList = InventorySaveData.ResourcesInfo;
 	KeyDataList = InventorySaveData.KeyDataItemsInfo;
+	SetCharmInventorySize(InventorySaveData.CharmInventorySize);
 	for (int32 i = 0; i < InventorySaveData.CharmInventorySlotsInfo.Num(); i++)
 	{
 		UItemBase* LocalCharm = NewObject<UItemBase>(this, InventorySaveData.CharmInventorySlotsInfo[i].ItemClass);

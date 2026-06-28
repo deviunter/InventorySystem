@@ -76,4 +76,7 @@ struct FPlayerInventorySaveSignature
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FSupportInventoryInfo> CharmInventorySlotsInfo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 CharmInventorySize;
 };

@@ -89,6 +89,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Charms")
 	void RefreshCharmInventory();
 
+	UFUNCTION(BlueprintCallable, Category = "Charms")
+	void SetCharmInventorySize(int32 NewSize);
+
 	// RADIAL MENU SLOTS
 
 	UFUNCTION(BlueprintCallable, Category = "Radial Menu")
