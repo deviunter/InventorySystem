@@ -99,3 +99,11 @@ enum class ELootGenerateRules : uint8
 	ByRarity,
 	Shuffle
 };
+
+UENUM(BlueprintType)
+enum class EStashType : uint8
+{
+	FillStash,
+	OpenedStash,
+	EmptyStash
+};

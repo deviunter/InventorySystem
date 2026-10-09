@@ -42,6 +42,10 @@ protected:
 
 	virtual void OnItemWillRemoved(TSubclassOf<UItemBase> RemovedItemClass);
 
+	// Updates slot array size based on current grid dimensions.
+	UFUNCTION()
+	void UpdateInventorySize();
+
 	// Type of inventory (affects behavior and UI).
 	UPROPERTY()
 	EInventoryType InventoryType;
@@ -193,10 +197,6 @@ private:
 	// Calculates remainder when adding to a stack.
 	UFUNCTION()
 	int32 CheckReminder(int32 Ammound, UItemBase* CheckedSlot);
-
-	// Updates slot array size based on current grid dimensions.
-	UFUNCTION()
-	void UpdateInventorySize();
 
 	UFUNCTION()
 	void CreateGridWidget();

@@ -15,11 +15,11 @@
 UPlayerInventoryComponent::UPlayerInventoryComponent()
 {
 	// RESOURCE LIST MAX AMMOUND SETUP
-	WoodResourceMaxAmount = 20;
-	MetalResourceMaxAmount = 25;
-	ElectricalResourceMaxAmount = 15;
-	ChemicalResourceMaxAmount = 30;
-	BioResourceMaxAmount = 35;
+	WoodResourceMaxAmount = 99;
+	MetalResourceMaxAmount = 99;
+	ElectricalResourceMaxAmount = 99;
+	ChemicalResourceMaxAmount = 99;
+	BioResourceMaxAmount = 99;
 
 	// RESOURCE LIST SETUP
 	ResourceList.Empty();

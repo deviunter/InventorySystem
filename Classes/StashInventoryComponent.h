@@ -31,6 +31,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool IsStashInspected() const;
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory Save")
+	FStashInventorySaveSignature GetStashInventorySaveData() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory Save")
+	void SetStashInventoryLoadData(FStashInventorySaveSignature InventorySaveData);
+
 protected:
 
 	virtual void BeginPlay() override;

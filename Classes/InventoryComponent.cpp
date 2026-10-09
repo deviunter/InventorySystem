@@ -530,10 +530,7 @@ void UInventoryComponent::CreateGridWidget()
 
 void UInventoryComponent::UpdateGridWidget()
 {
-	if (IsValid(InventoryGrid))
-	{
-		IWidgetsInterface::Execute_UpdateInventoryGrid((UObject*)InventoryGrid);
-	}
+	if (IsValid(InventoryGrid)) IWidgetsInterface::Execute_UpdateInventoryGrid((UObject*)InventoryGrid);
 }
 
 UUserWidget* UInventoryComponent::GetGridWidget() const

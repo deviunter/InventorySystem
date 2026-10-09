@@ -41,3 +41,40 @@ bool UStashInventoryComponent::IsStashInspected() const
 {
 	return !IsValid(LootInfo);
 }
+
+FStashInventorySaveSignature UStashInventoryComponent::GetStashInventorySaveData() const
+{
+	FStashInventorySaveSignature LocalData;
+	if (IsStashInspected())
+	{
+		LocalData.InventoryInfo = GetInventorySaveData();
+		LocalData.LootInfo = nullptr;
+		LocalData.StashType = LocalData.InventoryInfo.ItemSaveInfo.IsEmpty() ? EStashType::EmptyStash : EStashType::OpenedStash;
+	}
+	else
+	{
+		LocalData.LootInfo = LootInfo;
+		LocalData.StashType = EStashType::FillStash;
+	}
+	return LocalData;
+}
+
+void UStashInventoryComponent::SetStashInventoryLoadData(FStashInventorySaveSignature InventorySaveData)
+{
+	InventoryName = InventorySaveData.InventoryName;
+	switch (InventorySaveData.StashType)
+	{
+	case EStashType::EmptyStash:
+		GetOwner()->Destroy();
+		break;
+	case EStashType::FillStash:
+		LootInfo = InventorySaveData.LootInfo;
+		ItemSlots.Empty();
+		UpdateInventorySize();
+		break;
+	case EStashType::OpenedStash:
+		LootInfo = nullptr;
+		SetInventoryLoadData(InventorySaveData.InventoryInfo);
+		break;
+	}
+}

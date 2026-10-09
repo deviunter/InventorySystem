@@ -13,6 +13,8 @@
 #include "Systems/InventorySystem/Structures/Tile.h"
 #include "Systems/InventorySystem/Structures/KeyDataSignature.h"
 #include "Systems/InventorySystem/Structures/ResourceSignature.h"
+#include "Systems/InventorySystem/DataAssets/LootDataAsset.h"
+#include "Systems/InventorySystem/Enumerators/InventoryEnumetators.h"
 #include "InventorySave.generated.h"
 
 USTRUCT(BlueprintType)
@@ -79,4 +81,22 @@ struct FPlayerInventorySaveSignature
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 CharmInventorySize;
+};
+
+USTRUCT(BlueprintType)
+struct FStashInventorySaveSignature
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText InventoryName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FInventorySave InventoryInfo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<ULootDataAsset> LootInfo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EStashType StashType;
 };
