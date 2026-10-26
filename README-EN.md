@@ -9,9 +9,7 @@ Developed in Unreal Engine 5. "Unreal Engine" and its logo are trademarks or reg
 >Important! At the moment this system is not ready for integration into other projects; right now it is just a visual guide on how it can be done, and a demonstration of skills.
 >If you just download this system now and insert it into your project, it will not work, because it is tied to the ABYSSWHISPER project.
 
-**ENGLISH VERSION WILL BE LATER AND BELOW RUSSIAN**
-
-## RUSSIAN README
+## ENGLISH README
 
 # ABYSSWHISPER INVENTORY SYSTEM
 The ABYSSWHISPER inventory system is the spiritual successor to the After Darkness inventory system, its improved and refactored version, additionally fully ported to C++.
@@ -23,7 +21,10 @@ with other systems and how it worked for the atmosphere there was my reference.
 # FUTURE PLANS
 1. All current tasks for the ABYSSWHISPER project are implemented
 
-# UPDATE DESCRIPTION
+# UPDATE LOG
+
+`v. 1.2.0` - This change extends the inventory system with container-specific behavior and generated loot tables. It adds a new UContainerInventoryComponent that can inspect containers, track inspection state, and roll loot from configured data assets while exposing container rarity and inventory status to Blueprints.
+It also introduces UGeneratedGarbageDataAsset, which builds procedural garbage loot from a data table using item-type, rarity, or shuffle generation rules and applies randomized item counts. Finally, the inventory enum list includes the new ContainerInventory type.
 
 `v. 1.1.3` - Bug fixes and performance improvements
 
