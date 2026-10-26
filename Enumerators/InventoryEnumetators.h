@@ -51,7 +51,8 @@ enum class EInventoryType : uint8
 	DefaultInventory,
 	PlayerInventory,
 	StorageInventory,
-	LootboxInventory
+	LootboxInventory,
+	ContainerInventory
 };
 
 UENUM(BlueprintType)
