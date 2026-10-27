@@ -23,6 +23,8 @@ with other systems and how it worked for the atmosphere there was my reference.
 
 # UPDATE LOG
 
+`v. 1.2.1` - A critical bug has been fixed: the external UObject for AddItemAtClass was the inventory itself, which might not have been located on a persistent level. As a result, the Garbage Collector (GC) would remove items that had been moved to the actor if the sub-level was unloaded.
+
 `v. 1.2.0` - This change extends the inventory system with container-specific behavior and generated loot tables. It adds a new UContainerInventoryComponent that can inspect containers, track inspection state, and roll loot from configured data assets while exposing container rarity and inventory status to Blueprints.
 It also introduces UGeneratedGarbageDataAsset, which builds procedural garbage loot from a data table using item-type, rarity, or shuffle generation rules and applies randomized item counts. Finally, the inventory enum list includes the new ContainerInventory type.
 
