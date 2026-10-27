@@ -154,6 +154,7 @@ int32 UInventoryComponent::AddItemToStackWithReminder(UItemBase* ItemToAdd, int3
 
 bool UInventoryComponent::RemoveItem(UItemBase* ItemToRemove, int32 AmmoundToRemove, bool DestroyItem)
 {
+	/* Temporal */ UE_LOG(LogTemp, Warning, TEXT("RemoveItem called: %s x%d"), *ItemToRemove->GetItemSignature().ItemID.ToString(), AmmoundToRemove);
 	if (!IsValid(ItemToRemove)) return false;
 	bool bSuccessFinded = false;
 	for (UItemBase* LocalItem : ItemSlots)
@@ -326,7 +327,7 @@ void UInventoryComponent::AddItemAtClass(TSubclassOf<UItemBase> ItemClassToAdd, 
 	}
 	else
 	{
-		LocalItem = NewObject<UItemBase>(this, ItemClassToAdd);
+		LocalItem = NewObject<UItemBase>(GetWorld(), ItemClassToAdd);
 		LocalItem->SetCurrentAmmound(AddedAmmound);
 		AddItem(LocalItem);
 	}
@@ -493,6 +494,7 @@ int32 UInventoryComponent::GetItemAmmound(TSubclassOf<UItemBase> SearchingClass)
 
 void UInventoryComponent::SetNewInventorySize(int32 Column, int32 Row)
 {
+	/* Temporal */ UE_LOG(LogTemp, Warning, TEXT("SetNewInventorySize called: Col=%d Row=%d"), Column, Row);
 	ColumnSize = Column;
 	RowSize = Row;
 	UpdateInventorySize();
